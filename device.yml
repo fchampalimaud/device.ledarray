@@ -3,7 +3,7 @@
 # yaml-language-server: $schema=https://harp-tech.org/draft-02/schema/device.json
 device: LedArray
 whoAmI: 1088
-firmwareVersion: "2.4"
+firmwareVersion: "2.7"
 hardwareTargets: "1.1" # also 1.2 & 1.3
 registers:
   EnablePower: &ledstatereg

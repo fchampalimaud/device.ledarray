@@ -29,7 +29,7 @@ void hwbp_app_initialize(void)
    uint8_t hwH = 1;
    uint8_t hwL;
    uint8_t fwH = 2;
-   uint8_t fwL = 6;
+   uint8_t fwL = 7;
    uint8_t ass = 0;
    
    io_pin2in(&PORTA, 0, PULL_IO_TRISTATE, SENSE_IO_EDGES_BOTH);         // VERSION0
