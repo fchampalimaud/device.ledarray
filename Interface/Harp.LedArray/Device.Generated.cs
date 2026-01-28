@@ -65,7 +65,7 @@ namespace Harp.LedArray
             { 57, typeof(Led0PwmReal) },
             { 58, typeof(Led0PwmDutyCycleReal) },
             { 59, typeof(Led1PwmReal) },
-            { 60, typeof(LedD1PwmDutyCycleReal) },
+            { 60, typeof(Led1PwmDutyCycleReal) },
             { 61, typeof(AuxDigitalOutputState) },
             { 62, typeof(AuxLedPower) },
             { 63, typeof(DigitalOutputState) },
@@ -93,7 +93,7 @@ namespace Harp.LedArray
     /// describing the <see cref="LedArray"/> device registers.
     /// </summary>
     [Description("Returns the contents of the metadata file describing the LedArray device registers.")]
-    public partial class GetMetadata : Source<string>
+    public partial class GetDeviceMetadata : Source<string>
     {
         /// <summary>
         /// Returns an observable sequence with the contents of the metadata file
@@ -131,6 +131,156 @@ namespace Harp.LedArray
     }
 
     /// <summary>
+    /// Represents an operator that writes the sequence of <see cref="LedArray"/>" messages
+    /// to the standard Harp storage format.
+    /// </summary>
+    [Description("Writes the sequence of LedArray messages to the standard Harp storage format.")]
+    public partial class DeviceDataWriter : Sink<HarpMessage>, INamedElement
+    {
+        const string BinaryExtension = ".bin";
+        const string MetadataFileName = "device.yml";
+        readonly Bonsai.Harp.MessageWriter writer = new();
+
+        string INamedElement.Name => nameof(LedArray) + "DataWriter";
+
+        /// <summary>
+        /// Gets or sets the relative or absolute path on which to save the message data.
+        /// </summary>
+        [Description("The relative or absolute path of the directory on which to save the message data.")]
+        [Editor("Bonsai.Design.SaveFileNameEditor, Bonsai.Design", DesignTypes.UITypeEditor)]
+        public string Path
+        {
+            get => System.IO.Path.GetDirectoryName(writer.FileName);
+            set => writer.FileName = System.IO.Path.Combine(value, nameof(LedArray) + BinaryExtension);
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether element writing should be buffered. If <see langword="true"/>,
+        /// the write commands will be queued in memory as fast as possible and will be processed
+        /// by the writer in a different thread. Otherwise, writing will be done in the same
+        /// thread in which notifications arrive.
+        /// </summary>
+        [Description("Indicates whether writing should be buffered.")]
+        public bool Buffered
+        {
+            get => writer.Buffered;
+            set => writer.Buffered = value;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to overwrite the output file if it already exists.
+        /// </summary>
+        [Description("Indicates whether to overwrite the output file if it already exists.")]
+        public bool Overwrite
+        {
+            get => writer.Overwrite;
+            set => writer.Overwrite = value;
+        }
+
+        /// <summary>
+        /// Gets or sets a value specifying how the message filter will use the matching criteria.
+        /// </summary>
+        [Description("Specifies how the message filter will use the matching criteria.")]
+        public FilterType FilterType
+        {
+            get => writer.FilterType;
+            set => writer.FilterType = value;
+        }
+
+        /// <summary>
+        /// Gets or sets a value specifying the expected message type. If no value is
+        /// specified, all messages will be accepted.
+        /// </summary>
+        [Description("Specifies the expected message type. If no value is specified, all messages will be accepted.")]
+        public MessageType? MessageType
+        {
+            get => writer.MessageType;
+            set => writer.MessageType = value;
+        }
+
+        private IObservable<TSource> WriteDeviceMetadata<TSource>(IObservable<TSource> source)
+        {
+            var basePath = Path;
+            if (string.IsNullOrEmpty(basePath))
+                return source;
+
+            var metadataPath = System.IO.Path.Combine(basePath, MetadataFileName);
+            return Observable.Create<TSource>(observer =>
+            {
+                Bonsai.IO.PathHelper.EnsureDirectory(metadataPath);
+                if (System.IO.File.Exists(metadataPath) && !Overwrite)
+                {
+                    throw new System.IO.IOException(string.Format("The file '{0}' already exists.", metadataPath));
+                }
+
+                System.IO.File.WriteAllText(metadataPath, Device.Metadata);
+                return source.SubscribeSafe(observer);
+            });
+        }
+
+        /// <summary>
+        /// Writes each Harp message in the sequence to the specified binary file, and the
+        /// contents of the device metadata file to a separate text file.
+        /// </summary>
+        /// <param name="source">The sequence of messages to write to the file.</param>
+        /// <returns>
+        /// An observable sequence that is identical to the <paramref name="source"/>
+        /// sequence but where there is an additional side effect of writing the
+        /// messages to a raw binary file, and the contents of the device metadata file
+        /// to a separate text file.
+        /// </returns>
+        public override IObservable<HarpMessage> Process(IObservable<HarpMessage> source)
+        {
+            return source.Publish(ps => ps.Merge(
+                WriteDeviceMetadata(writer.Process(ps.GroupBy(message => message.Address)))
+                .IgnoreElements()
+                .Cast<HarpMessage>()));
+        }
+
+        /// <summary>
+        /// Writes each Harp message in the sequence of observable groups to the
+        /// corresponding binary file, where the name of each file is generated from
+        /// the common group register address. The contents of the device metadata file are
+        /// written to a separate text file.
+        /// </summary>
+        /// <param name="source">
+        /// A sequence of observable groups, each of which corresponds to a unique register
+        /// address.
+        /// </param>
+        /// <returns>
+        /// An observable sequence that is identical to the <paramref name="source"/>
+        /// sequence but where there is an additional side effect of writing the Harp
+        /// messages in each group to the corresponding file, and the contents of the device
+        /// metadata file to a separate text file.
+        /// </returns>
+        public IObservable<IGroupedObservable<int, HarpMessage>> Process(IObservable<IGroupedObservable<int, HarpMessage>> source)
+        {
+            return WriteDeviceMetadata(writer.Process(source));
+        }
+
+        /// <summary>
+        /// Writes each Harp message in the sequence of observable groups to the
+        /// corresponding binary file, where the name of each file is generated from
+        /// the common group register name. The contents of the device metadata file are
+        /// written to a separate text file.
+        /// </summary>
+        /// <param name="source">
+        /// A sequence of observable groups, each of which corresponds to a unique register
+        /// type.
+        /// </param>
+        /// <returns>
+        /// An observable sequence that is identical to the <paramref name="source"/>
+        /// sequence but where there is an additional side effect of writing the Harp
+        /// messages in each group to the corresponding file, and the contents of the device
+        /// metadata file to a separate text file.
+        /// </returns>
+        public IObservable<IGroupedObservable<Type, HarpMessage>> Process(IObservable<IGroupedObservable<Type, HarpMessage>> source)
+        {
+            return WriteDeviceMetadata(writer.Process(source));
+        }
+    }
+
+    /// <summary>
     /// Represents an operator that filters register-specific messages
     /// reported by the <see cref="LedArray"/> device.
     /// </summary>
@@ -162,7 +312,7 @@ namespace Harp.LedArray
     /// <seealso cref="Led0PwmReal"/>
     /// <seealso cref="Led0PwmDutyCycleReal"/>
     /// <seealso cref="Led1PwmReal"/>
-    /// <seealso cref="LedD1PwmDutyCycleReal"/>
+    /// <seealso cref="Led1PwmDutyCycleReal"/>
     /// <seealso cref="AuxDigitalOutputState"/>
     /// <seealso cref="AuxLedPower"/>
     /// <seealso cref="DigitalOutputState"/>
@@ -195,7 +345,7 @@ namespace Harp.LedArray
     [XmlInclude(typeof(Led0PwmReal))]
     [XmlInclude(typeof(Led0PwmDutyCycleReal))]
     [XmlInclude(typeof(Led1PwmReal))]
-    [XmlInclude(typeof(LedD1PwmDutyCycleReal))]
+    [XmlInclude(typeof(Led1PwmDutyCycleReal))]
     [XmlInclude(typeof(AuxDigitalOutputState))]
     [XmlInclude(typeof(AuxLedPower))]
     [XmlInclude(typeof(DigitalOutputState))]
@@ -249,7 +399,7 @@ namespace Harp.LedArray
     /// <seealso cref="Led0PwmReal"/>
     /// <seealso cref="Led0PwmDutyCycleReal"/>
     /// <seealso cref="Led1PwmReal"/>
-    /// <seealso cref="LedD1PwmDutyCycleReal"/>
+    /// <seealso cref="Led1PwmDutyCycleReal"/>
     /// <seealso cref="AuxDigitalOutputState"/>
     /// <seealso cref="AuxLedPower"/>
     /// <seealso cref="DigitalOutputState"/>
@@ -282,7 +432,7 @@ namespace Harp.LedArray
     [XmlInclude(typeof(Led0PwmReal))]
     [XmlInclude(typeof(Led0PwmDutyCycleReal))]
     [XmlInclude(typeof(Led1PwmReal))]
-    [XmlInclude(typeof(LedD1PwmDutyCycleReal))]
+    [XmlInclude(typeof(Led1PwmDutyCycleReal))]
     [XmlInclude(typeof(AuxDigitalOutputState))]
     [XmlInclude(typeof(AuxLedPower))]
     [XmlInclude(typeof(DigitalOutputState))]
@@ -315,7 +465,7 @@ namespace Harp.LedArray
     [XmlInclude(typeof(TimestampedLed0PwmReal))]
     [XmlInclude(typeof(TimestampedLed0PwmDutyCycleReal))]
     [XmlInclude(typeof(TimestampedLed1PwmReal))]
-    [XmlInclude(typeof(TimestampedLedD1PwmDutyCycleReal))]
+    [XmlInclude(typeof(TimestampedLed1PwmDutyCycleReal))]
     [XmlInclude(typeof(TimestampedAuxDigitalOutputState))]
     [XmlInclude(typeof(TimestampedAuxLedPower))]
     [XmlInclude(typeof(TimestampedDigitalOutputState))]
@@ -366,7 +516,7 @@ namespace Harp.LedArray
     /// <seealso cref="Led0PwmReal"/>
     /// <seealso cref="Led0PwmDutyCycleReal"/>
     /// <seealso cref="Led1PwmReal"/>
-    /// <seealso cref="LedD1PwmDutyCycleReal"/>
+    /// <seealso cref="Led1PwmDutyCycleReal"/>
     /// <seealso cref="AuxDigitalOutputState"/>
     /// <seealso cref="AuxLedPower"/>
     /// <seealso cref="DigitalOutputState"/>
@@ -399,7 +549,7 @@ namespace Harp.LedArray
     [XmlInclude(typeof(Led0PwmReal))]
     [XmlInclude(typeof(Led0PwmDutyCycleReal))]
     [XmlInclude(typeof(Led1PwmReal))]
-    [XmlInclude(typeof(LedD1PwmDutyCycleReal))]
+    [XmlInclude(typeof(Led1PwmDutyCycleReal))]
     [XmlInclude(typeof(AuxDigitalOutputState))]
     [XmlInclude(typeof(AuxLedPower))]
     [XmlInclude(typeof(DigitalOutputState))]
@@ -3165,25 +3315,25 @@ namespace Harp.LedArray
     /// Represents a register that get the real duty cycle (%) of LED1 when in Pwm mode.
     /// </summary>
     [Description("Get the real duty cycle (%) of LED1 when in Pwm mode.")]
-    public partial class LedD1PwmDutyCycleReal
+    public partial class Led1PwmDutyCycleReal
     {
         /// <summary>
-        /// Represents the address of the <see cref="LedD1PwmDutyCycleReal"/> register. This field is constant.
+        /// Represents the address of the <see cref="Led1PwmDutyCycleReal"/> register. This field is constant.
         /// </summary>
         public const int Address = 60;
 
         /// <summary>
-        /// Represents the payload type of the <see cref="LedD1PwmDutyCycleReal"/> register. This field is constant.
+        /// Represents the payload type of the <see cref="Led1PwmDutyCycleReal"/> register. This field is constant.
         /// </summary>
         public const PayloadType RegisterType = PayloadType.Float;
 
         /// <summary>
-        /// Represents the length of the <see cref="LedD1PwmDutyCycleReal"/> register. This field is constant.
+        /// Represents the length of the <see cref="Led1PwmDutyCycleReal"/> register. This field is constant.
         /// </summary>
         public const int RegisterLength = 1;
 
         /// <summary>
-        /// Returns the payload data for <see cref="LedD1PwmDutyCycleReal"/> register messages.
+        /// Returns the payload data for <see cref="Led1PwmDutyCycleReal"/> register messages.
         /// </summary>
         /// <param name="message">A <see cref="HarpMessage"/> object representing the register message.</param>
         /// <returns>A value representing the message payload.</returns>
@@ -3193,7 +3343,7 @@ namespace Harp.LedArray
         }
 
         /// <summary>
-        /// Returns the timestamped payload data for <see cref="LedD1PwmDutyCycleReal"/> register messages.
+        /// Returns the timestamped payload data for <see cref="Led1PwmDutyCycleReal"/> register messages.
         /// </summary>
         /// <param name="message">A <see cref="HarpMessage"/> object representing the register message.</param>
         /// <returns>A value representing the timestamped message payload.</returns>
@@ -3203,12 +3353,12 @@ namespace Harp.LedArray
         }
 
         /// <summary>
-        /// Returns a Harp message for the <see cref="LedD1PwmDutyCycleReal"/> register.
+        /// Returns a Harp message for the <see cref="Led1PwmDutyCycleReal"/> register.
         /// </summary>
         /// <param name="messageType">The type of the Harp message.</param>
         /// <param name="value">The value to be stored in the message payload.</param>
         /// <returns>
-        /// A <see cref="HarpMessage"/> object for the <see cref="LedD1PwmDutyCycleReal"/> register
+        /// A <see cref="HarpMessage"/> object for the <see cref="Led1PwmDutyCycleReal"/> register
         /// with the specified message type and payload.
         /// </returns>
         public static HarpMessage FromPayload(MessageType messageType, float value)
@@ -3217,14 +3367,14 @@ namespace Harp.LedArray
         }
 
         /// <summary>
-        /// Returns a timestamped Harp message for the <see cref="LedD1PwmDutyCycleReal"/>
+        /// Returns a timestamped Harp message for the <see cref="Led1PwmDutyCycleReal"/>
         /// register.
         /// </summary>
         /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
         /// <param name="messageType">The type of the Harp message.</param>
         /// <param name="value">The value to be stored in the message payload.</param>
         /// <returns>
-        /// A <see cref="HarpMessage"/> object for the <see cref="LedD1PwmDutyCycleReal"/> register
+        /// A <see cref="HarpMessage"/> object for the <see cref="Led1PwmDutyCycleReal"/> register
         /// with the specified message type, timestamp, and payload.
         /// </returns>
         public static HarpMessage FromPayload(double timestamp, MessageType messageType, float value)
@@ -3235,25 +3385,25 @@ namespace Harp.LedArray
 
     /// <summary>
     /// Provides methods for manipulating timestamped messages from the
-    /// LedD1PwmDutyCycleReal register.
+    /// Led1PwmDutyCycleReal register.
     /// </summary>
-    /// <seealso cref="LedD1PwmDutyCycleReal"/>
-    [Description("Filters and selects timestamped messages from the LedD1PwmDutyCycleReal register.")]
-    public partial class TimestampedLedD1PwmDutyCycleReal
+    /// <seealso cref="Led1PwmDutyCycleReal"/>
+    [Description("Filters and selects timestamped messages from the Led1PwmDutyCycleReal register.")]
+    public partial class TimestampedLed1PwmDutyCycleReal
     {
         /// <summary>
-        /// Represents the address of the <see cref="LedD1PwmDutyCycleReal"/> register. This field is constant.
+        /// Represents the address of the <see cref="Led1PwmDutyCycleReal"/> register. This field is constant.
         /// </summary>
-        public const int Address = LedD1PwmDutyCycleReal.Address;
+        public const int Address = Led1PwmDutyCycleReal.Address;
 
         /// <summary>
-        /// Returns timestamped payload data for <see cref="LedD1PwmDutyCycleReal"/> register messages.
+        /// Returns timestamped payload data for <see cref="Led1PwmDutyCycleReal"/> register messages.
         /// </summary>
         /// <param name="message">A <see cref="HarpMessage"/> object representing the register message.</param>
         /// <returns>A value representing the timestamped message payload.</returns>
         public static Timestamped<float> GetPayload(HarpMessage message)
         {
-            return LedD1PwmDutyCycleReal.GetTimestampedPayload(message);
+            return Led1PwmDutyCycleReal.GetTimestampedPayload(message);
         }
     }
 
@@ -3698,7 +3848,7 @@ namespace Harp.LedArray
     /// <seealso cref="CreateLed0PwmRealPayload"/>
     /// <seealso cref="CreateLed0PwmDutyCycleRealPayload"/>
     /// <seealso cref="CreateLed1PwmRealPayload"/>
-    /// <seealso cref="CreateLedD1PwmDutyCycleRealPayload"/>
+    /// <seealso cref="CreateLed1PwmDutyCycleRealPayload"/>
     /// <seealso cref="CreateAuxDigitalOutputStatePayload"/>
     /// <seealso cref="CreateAuxLedPowerPayload"/>
     /// <seealso cref="CreateDigitalOutputStatePayload"/>
@@ -3731,7 +3881,7 @@ namespace Harp.LedArray
     [XmlInclude(typeof(CreateLed0PwmRealPayload))]
     [XmlInclude(typeof(CreateLed0PwmDutyCycleRealPayload))]
     [XmlInclude(typeof(CreateLed1PwmRealPayload))]
-    [XmlInclude(typeof(CreateLedD1PwmDutyCycleRealPayload))]
+    [XmlInclude(typeof(CreateLed1PwmDutyCycleRealPayload))]
     [XmlInclude(typeof(CreateAuxDigitalOutputStatePayload))]
     [XmlInclude(typeof(CreateAuxLedPowerPayload))]
     [XmlInclude(typeof(CreateDigitalOutputStatePayload))]
@@ -3764,7 +3914,7 @@ namespace Harp.LedArray
     [XmlInclude(typeof(CreateTimestampedLed0PwmRealPayload))]
     [XmlInclude(typeof(CreateTimestampedLed0PwmDutyCycleRealPayload))]
     [XmlInclude(typeof(CreateTimestampedLed1PwmRealPayload))]
-    [XmlInclude(typeof(CreateTimestampedLedD1PwmDutyCycleRealPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed1PwmDutyCycleRealPayload))]
     [XmlInclude(typeof(CreateTimestampedAuxDigitalOutputStatePayload))]
     [XmlInclude(typeof(CreateTimestampedAuxLedPowerPayload))]
     [XmlInclude(typeof(CreateTimestampedDigitalOutputStatePayload))]
@@ -5362,33 +5512,33 @@ namespace Harp.LedArray
     /// Represents an operator that creates a message payload
     /// that get the real duty cycle (%) of LED1 when in Pwm mode.
     /// </summary>
-    [DisplayName("LedD1PwmDutyCycleRealPayload")]
+    [DisplayName("Led1PwmDutyCycleRealPayload")]
     [Description("Creates a message payload that get the real duty cycle (%) of LED1 when in Pwm mode.")]
-    public partial class CreateLedD1PwmDutyCycleRealPayload
+    public partial class CreateLed1PwmDutyCycleRealPayload
     {
         /// <summary>
         /// Gets or sets the value that get the real duty cycle (%) of LED1 when in Pwm mode.
         /// </summary>
         [Description("The value that get the real duty cycle (%) of LED1 when in Pwm mode.")]
-        public float LedD1PwmDutyCycleReal { get; set; }
+        public float Led1PwmDutyCycleReal { get; set; }
 
         /// <summary>
-        /// Creates a message payload for the LedD1PwmDutyCycleReal register.
+        /// Creates a message payload for the Led1PwmDutyCycleReal register.
         /// </summary>
         /// <returns>The created message payload value.</returns>
         public float GetPayload()
         {
-            return LedD1PwmDutyCycleReal;
+            return Led1PwmDutyCycleReal;
         }
 
         /// <summary>
         /// Creates a message that get the real duty cycle (%) of LED1 when in Pwm mode.
         /// </summary>
         /// <param name="messageType">Specifies the type of the created message.</param>
-        /// <returns>A new message for the LedD1PwmDutyCycleReal register.</returns>
+        /// <returns>A new message for the Led1PwmDutyCycleReal register.</returns>
         public HarpMessage GetMessage(MessageType messageType)
         {
-            return Harp.LedArray.LedD1PwmDutyCycleReal.FromPayload(messageType, GetPayload());
+            return Harp.LedArray.Led1PwmDutyCycleReal.FromPayload(messageType, GetPayload());
         }
     }
 
@@ -5396,19 +5546,19 @@ namespace Harp.LedArray
     /// Represents an operator that creates a timestamped message payload
     /// that get the real duty cycle (%) of LED1 when in Pwm mode.
     /// </summary>
-    [DisplayName("TimestampedLedD1PwmDutyCycleRealPayload")]
+    [DisplayName("TimestampedLed1PwmDutyCycleRealPayload")]
     [Description("Creates a timestamped message payload that get the real duty cycle (%) of LED1 when in Pwm mode.")]
-    public partial class CreateTimestampedLedD1PwmDutyCycleRealPayload : CreateLedD1PwmDutyCycleRealPayload
+    public partial class CreateTimestampedLed1PwmDutyCycleRealPayload : CreateLed1PwmDutyCycleRealPayload
     {
         /// <summary>
         /// Creates a timestamped message that get the real duty cycle (%) of LED1 when in Pwm mode.
         /// </summary>
         /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
         /// <param name="messageType">Specifies the type of the created message.</param>
-        /// <returns>A new timestamped message for the LedD1PwmDutyCycleReal register.</returns>
+        /// <returns>A new timestamped message for the Led1PwmDutyCycleReal register.</returns>
         public HarpMessage GetMessage(double timestamp, MessageType messageType)
         {
-            return Harp.LedArray.LedD1PwmDutyCycleReal.FromPayload(timestamp, messageType, GetPayload());
+            return Harp.LedArray.Led1PwmDutyCycleReal.FromPayload(timestamp, messageType, GetPayload());
         }
     }
 

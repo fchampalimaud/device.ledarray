@@ -207,7 +207,7 @@ registers:
     access: Read
     type: Float
     description: Get the real frequency (Hz) of LED1 when in Pwm mode.
-  LedD1PwmDutyCycleReal:
+  Led1PwmDutyCycleReal:
     address: 60
     access: Read
     type: Float

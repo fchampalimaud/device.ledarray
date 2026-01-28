@@ -14,15 +14,18 @@ namespace Harp.LedArray
         /// <param name="portName">
         /// The name of the serial port used to communicate with the Harp device.
         /// </param>
+        /// <param name="cancellationToken">
+        /// A <see cref="CancellationToken"/> which can be used to cancel the operation.
+        /// </param>
         /// <returns>
         /// A task that represents the asynchronous initialization operation. The value of
         /// the <see cref="Task{TResult}.Result"/> parameter contains a new instance of
         /// the <see cref="AsyncDevice"/> class.
         /// </returns>
-        public static async Task<AsyncDevice> CreateAsync(string portName)
+        public static async Task<AsyncDevice> CreateAsync(string portName, CancellationToken cancellationToken = default)
         {
             var device = new AsyncDevice(portName);
-            var whoAmI = await device.ReadWhoAmIAsync();
+            var whoAmI = await device.ReadWhoAmIAsync(cancellationToken);
             if (whoAmI != Device.WhoAmI)
             {
                 var errorMessage = string.Format(
@@ -1278,7 +1281,7 @@ namespace Harp.LedArray
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LedD1PwmDutyCycleReal register.
+        /// Asynchronously reads the contents of the Led1PwmDutyCycleReal register.
         /// </summary>
         /// <param name="cancellationToken">
         /// A <see cref="CancellationToken"/> which can be used to cancel the operation.
@@ -1287,14 +1290,14 @@ namespace Harp.LedArray
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<float> ReadLedD1PwmDutyCycleRealAsync(CancellationToken cancellationToken = default)
+        public async Task<float> ReadLed1PwmDutyCycleRealAsync(CancellationToken cancellationToken = default)
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LedD1PwmDutyCycleReal.Address), cancellationToken);
-            return LedD1PwmDutyCycleReal.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led1PwmDutyCycleReal.Address), cancellationToken);
+            return Led1PwmDutyCycleReal.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LedD1PwmDutyCycleReal register.
+        /// Asynchronously reads the timestamped contents of the Led1PwmDutyCycleReal register.
         /// </summary>
         /// <param name="cancellationToken">
         /// A <see cref="CancellationToken"/> which can be used to cancel the operation.
@@ -1303,10 +1306,10 @@ namespace Harp.LedArray
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<float>> ReadTimestampedLedD1PwmDutyCycleRealAsync(CancellationToken cancellationToken = default)
+        public async Task<Timestamped<float>> ReadTimestampedLed1PwmDutyCycleRealAsync(CancellationToken cancellationToken = default)
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LedD1PwmDutyCycleReal.Address), cancellationToken);
-            return LedD1PwmDutyCycleReal.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led1PwmDutyCycleReal.Address), cancellationToken);
+            return Led1PwmDutyCycleReal.GetTimestampedPayload(reply);
         }
 
         /// <summary>
