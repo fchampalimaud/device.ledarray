@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E25997E9-FD75-45C0-94EC-5EAC78BE0F73}") = "Harp.LedArray.App", "Harp.LedArray.App\Harp.LedArray.App.csproj", "{234DC1DC-09C3-417D-973A-3647252B26B5}"
+EndProject
+Project("{E25997E9-FD75-45C0-94EC-5EAC78BE0F73}") = "Harp.LedArray.Design", "Harp.LedArray.Design\Harp.LedArray.Design.csproj", "{3A36EE39-3540-417A-B979-3B36F9F21C3C}"
+EndProject
+Project("{E25997E9-FD75-45C0-94EC-5EAC78BE0F73}") = "Harp.LedArray", "..\Interface\Harp.LedArray\Harp.LedArray.csproj", "{5D43DE0B-202E-4F4F-9AEF-E63C5AA3530B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3662E764-C393-426E-905E-9F945506CC83}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Harp.LedArray.nsi = Harp.LedArray.nsi
+		README.md = README.md
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{234DC1DC-09C3-417D-973A-3647252B26B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{234DC1DC-09C3-417D-973A-3647252B26B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{234DC1DC-09C3-417D-973A-3647252B26B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{234DC1DC-09C3-417D-973A-3647252B26B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A36EE39-3540-417A-B979-3B36F9F21C3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A36EE39-3540-417A-B979-3B36F9F21C3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A36EE39-3540-417A-B979-3B36F9F21C3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A36EE39-3540-417A-B979-3B36F9F21C3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D43DE0B-202E-4F4F-9AEF-E63C5AA3530B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D43DE0B-202E-4F4F-9AEF-E63C5AA3530B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D43DE0B-202E-4F4F-9AEF-E63C5AA3530B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D43DE0B-202E-4F4F-9AEF-E63C5AA3530B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,76 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Harp.LedArray.Design.Controls"
+                    x:ClassModifier="internal">
+
+  <Design.PreviewWith>
+    <controls:GroupBox Header="PWM mode"
+                       Margin="10"
+                       HeaderBackground="White">
+      <TextBlock Text="Hello World" />
+    </controls:GroupBox>
+  </Design.PreviewWith>
+
+  <ControlTheme x:Key="{x:Type controls:GroupBox}"
+                TargetType="controls:GroupBox">
+
+    <Setter Property="BorderThickness"
+            Value="{DynamicResource GroupBoxBorderThickness}" />
+    <Setter Property="BorderBrush"
+            Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+    <Setter Property="Background"
+            Value="{DynamicResource GroupBoxBackground}" />
+    <Setter Property="Padding"
+            Value="{DynamicResource GroupBoxPadding}" />
+    <Setter Property="CornerRadius"
+            Value="4" />
+
+    <!-- Default header mask comes from inherited surface background -->
+    <Setter Property="HeaderBackground"
+            Value="{Binding (controls:GroupBox.SurfaceBackground), RelativeSource={RelativeSource Self}}" />
+
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid UseLayoutRounding="True"
+              RowDefinitions="Auto,*">
+
+          <Border Grid.RowSpan="2"
+                  Margin="0,8,0,0"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  Background="{TemplateBinding Background}" />
+
+          <Border Grid.Row="0"
+                  Margin="{DynamicResource GroupBoxHeaderMargin}"
+                  Padding="{DynamicResource GroupBoxHeaderPadding}"
+                  Background="{TemplateBinding HeaderBackground}"
+                  HorizontalAlignment="Left">
+            <ContentPresenter Name="PART_HeaderPresenter"
+                              Content="{TemplateBinding Header}"
+                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                              FontSize="{DynamicResource GroupBoxHeaderFontSize}"
+                              FontWeight="{DynamicResource GroupBoxHeaderFontWeight}"
+                              Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                              RecognizesAccessKey="True"
+                              UseLayoutRounding="{TemplateBinding UseLayoutRounding}" />
+          </Border>
+
+          <Border Grid.Row="1"
+                  Padding="{TemplateBinding Padding}"
+                  Background="Transparent">
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                              RecognizesAccessKey="True"
+                              UseLayoutRounding="{TemplateBinding UseLayoutRounding}" />
+          </Border>
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

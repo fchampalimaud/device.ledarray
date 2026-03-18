@@ -1,0 +1,21 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Design.PreviewWith>
+    <Border Padding="20" />
+  </Design.PreviewWith>
+
+  <Style>
+    <Style.Resources>
+      <Color x:Key="BlueAccentColor">#009CDF</Color>
+
+      <Thickness x:Key="GroupBoxPadding">12,10,12,12</Thickness>
+      <x:Double x:Key="GroupBoxHeaderFontSize">14</x:Double>
+      <FontWeight x:Key="GroupBoxHeaderFontWeight">SemiBold</FontWeight>
+      <Thickness x:Key="GroupBoxHeaderMargin">8,0,8,0</Thickness>
+      <Thickness x:Key="GroupBoxHeaderPadding">6,0,6,0</Thickness>
+      <Thickness x:Key="GroupBoxBorderThickness">1</Thickness>
+      <SolidColorBrush x:Key="GroupBoxBackground" Color="Transparent" />
+    </Style.Resources>
+  </Style>
+</Styles>
