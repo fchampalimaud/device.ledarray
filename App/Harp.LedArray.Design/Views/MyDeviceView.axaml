@@ -134,53 +134,42 @@
           </Grid>
         </Grid>
         <StackPanel Orientation="Horizontal">
-          <TabControl SelectedIndex="3" Margin="0,0,10,0">
+          <TabControl SelectedIndex="1" Margin="0,0,10,0">
             <!-- Control and Events Column -->
             <TabItem Header="Control and Events" FontSize="20" FontWeight="SemiBold">
               <ScrollViewer>
                 <StackPanel Spacing="20" Margin="0,10,0,0">
-                  <StackPanel Orientation="Vertical" Spacing="5">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                      <Label FontWeight="Bold" FontSize="14" Padding="0">Enable Device Events</Label>
-                      <LucideIcon Kind="Info" Size="16" 
-                                  Foreground="{Binding IconColor}"
-                                  VerticalAlignment="Top">
-                        <ToolTip.Tip>Specifies all the active events in the device.</ToolTip.Tip>
-                      </LucideIcon>
+                  <!-- Enable Events -->
+                  <controls:RegisterField Header="Enable Device Events"
+                                          Description="Specifies all the active events in the device.">
+                    <StackPanel Spacing="10">
+                      <CheckBox IsChecked="{Binding IsEnableLedEnabled}"
+                                IsEnabled="True">
+                        EnableLed
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsDigitalInputStateEnabled}"
+                                IsEnabled="True">
+                        DigitalInputState
+                      </CheckBox>
                     </StackPanel>
-                    <CheckBox IsChecked="{Binding IsEnableLedEnabled}"
-                              IsEnabled="True">
-                      EnableLed
-                    </CheckBox>
-                    <CheckBox IsChecked="{Binding IsDigitalInputStateEnabled}"
-                              IsEnabled="True">
-                      DigitalInputState
-                    </CheckBox>
-                  </StackPanel>
+                  </controls:RegisterField>
 
                   <!-- Register: DigitalInputState (Read-Only, Event) -->
-                  <StackPanel Orientation="Vertical" Spacing="10">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                      <Label FontWeight="Bold" FontSize="14" Padding="0">DigitalInputState</Label>
-                      <LucideIcon Kind="Info" Size="16"
-                                  Foreground="{Binding IconColor}"
-                                  VerticalAlignment="Top">
-                        <ToolTip.Tip>State of the digital input pins. An event will be emitted when the value of any digital input pin changes.</ToolTip.Tip>
-                      </LucideIcon>
+                  <controls:RegisterField Header="DigitalInputState"
+                                              Description="State of the digital input pins. An event will be emitted when the value of any digital input pin changes.">
+                    <StackPanel Orientation="Vertical" Spacing="10">
+                      <StackPanel Orientation="Horizontal" Spacing="5">
+                        <controls:VisualStatus Status="{Binding IsDI0Enabled_DigitalInputState}"
+                                               Width="15" Height="15" />
+                        <TextBlock Text="DI0" VerticalAlignment="Center" />
+                      </StackPanel>
+                      <StackPanel Orientation="Horizontal" Spacing="5">
+                        <controls:VisualStatus Status="{Binding IsDI1Enabled_DigitalInputState}"
+                                               Width="15" Height="15" />
+                        <TextBlock Text="DI1" VerticalAlignment="Center" />
+                      </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                      <controls:VisualStatus Status="{Binding IsDI0Enabled_DigitalInputState}"
-                                             Width="15" Height="15" />
-                      <TextBlock Text="DI0" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                      <controls:VisualStatus Status="{Binding IsDI1Enabled_DigitalInputState}"
-                                             Width="15" Height="15" />
-                      <TextBlock Text="DI1" VerticalAlignment="Center" />
-                    </StackPanel>
-                  </StackPanel>
-                  
-                  
+                    </controls:RegisterField>
                 </StackPanel>
               </ScrollViewer>
             </TabItem>
@@ -188,19 +177,12 @@
             <!-- LED0 Tab -->
             <TabItem Header="LED Array 0" FontSize="20" FontWeight="SemiBold">
               <ScrollViewer>
-                <StackPanel Spacing="20"
+                <StackPanel Spacing="10"
                             Background="{Binding SurfaceBackground}"
                             controls:GroupBox.SurfaceBackground="{Binding SurfaceBackground}">
                   <!-- Register: PulseMode (Write) -->
-                  <StackPanel Orientation="Vertical" Spacing="10">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                      <Label FontWeight="Bold" FontSize="14" Padding="0">LED0 Pulse Mode</Label>
-                      <LucideIcon Kind="Info" Size="16"
-                                  Foreground="{Binding IconColor}"
-                                  VerticalAlignment="Top">
-                        <ToolTip.Tip>Sets the pulse mode used by the LEDs.</ToolTip.Tip>
-                      </LucideIcon>
-                    </StackPanel>
+                  <controls:RegisterField Header="LED0 Pulse Mode"
+                                              Description="Configuration of the pulse mode used by the LEDs.">
                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
                       <ComboBox Grid.Row="0" Grid.Column="1"
                                 SelectedItem="{Binding Led0SelectedPulseMode}"
@@ -223,395 +205,308 @@
                         <x:Static Member="local:PulseModeConfig.PulseTime" />
                       </ComboBox>
                     </Grid>
-                  </StackPanel>
-                  
-                  
-                  <!-- <controls:GroupBox Header="PWM mode" HorizontalAlignment="Stretch" IsVisible="{Binding IsLed0PwmMode}"> -->
-                    <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*,*" IsVisible="{Binding IsLed0PwmMode}">
-                      <!-- Register: Led0PwmFrequency (Write) -->
-                      <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Frequency (Hz)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led0PwmFrequency}"
-                                       Minimum="0.5"
-                                       Maximum="2000"
-                                       ClipValueToMinMax="True"
-                                       Increment="0.1"
-                                       FormatString="F2"
-                                       Width="200"
-                                       HorizontalAlignment="Left"/>
-                      </StackPanel>
-                      <!-- Register: Led0PwmReal (Read-Only) -->
-                      <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Real Frequency (Hz)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Get the real frequency (Hz) of LED0 when in Pwm mode.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <TextBlock Text="{Binding Led0PwmReal}"
-                                   HorizontalAlignment="Left"
-                                   Margin="0,5,0,0"
-                                   FontSize="14" />
-                      </StackPanel>
-                      <!-- Register: Led0PwmDutyCycle (Write) -->
-                      <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Duty Cycle (%)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led0PwmDutyCycle}"
-                                       Minimum="0.1"
-                                       Maximum="99.9"
-                                       ClipValueToMinMax="True"
-                                       Increment="0.1"
-                                       FormatString="F2"
-                                       Width="200"
-                                       HorizontalAlignment="Left"/>
-                      </StackPanel>
-                      <!-- Register: Led0PwmDutyCycleReal (Read-Only) -->
-                      <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Real Duty Cycle (%)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Get the real duty cycle (%) of LED0 when in Pwm mode.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <TextBlock Text="{Binding Led0PwmDutyCycleReal}"
-                                   HorizontalAlignment="Left"
-                                   Margin="0,5,0,0"
-                                   FontSize="14" />
-                      </StackPanel>
-                      <!-- Register: Led0PwmPulseCounter (Write) -->
-                      <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Vertical" Spacing="10" Margin="0,0,20,0">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Number of pulses</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led0PwmPulseCounter}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"/>
-                      </StackPanel>
-                    </Grid>
-                  <!-- </controls:GroupBox> -->
-                  
-                  <!-- <controls:GroupBox Header="Interval mode" IsVisible="{Binding IsLed0IntervalMode}"> -->
-                    <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,*,*" IsVisible="{Binding IsLed0IntervalMode}">
-                      <!-- Register: Led0PulseTimeOn (Write) -->
-                      <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Time ON (ms)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led0PulseTimeOn}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"
-                                       Margin="0,0,0,0" />
-                      </StackPanel>
-                      <!-- Register: Led0PulseTimeOff (Write) -->
-                      <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Time OFF (ms)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led0PulseTimeOff}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"
-                                       Margin="0,0,0,0" />
-                      </StackPanel>
-                      <!-- Register: Led0PulseTimePulseCounter (Write) -->
-                      <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical" Spacing="10">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Number of pulses</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led0PulseTimePulseCounter}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"
-                                       Margin="0,0,0,0" />
-                      </StackPanel>
-                      <!-- Register: Led0PulseRepeatCounter (Write) -->
-                      <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="10">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Number of repetitions</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led0PulseRepeatCounter}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"
-                                       Margin="0,0,0,0" />
-                      </StackPanel>
+                  </controls:RegisterField>
 
-                      <!-- Register: Led0PulseTimeTail (Write) -->
-                      <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="10">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Period before repeat (ms)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led0PulseTimeTail}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"
-                                       Margin="0,0,0,0" />
-                      </StackPanel>
-                    </Grid>
-                  <!-- </controls:GroupBox> -->
+                  <Grid RowDefinitions="*,*,*"
+                        ColumnDefinitions="*,*,*"
+                        IsVisible="{Binding IsLed0PwmMode}">
+                    <!-- Register: Led0PwmFrequency (Write) -->
+                    <controls:RegisterField Grid.Row="0"
+                                            Grid.Column="0"
+                                            Header="Frequency (Hz)"
+                                            Description="Sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.">
+                      <NumericUpDown Value="{Binding Led0PwmFrequency}"
+                                     Minimum="0.5"
+                                     Maximum="2000"
+                                     ClipValueToMinMax="True"
+                                     Increment="0.1"
+                                     FormatString="F2"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
+
+                    <!-- Register: Led0PwmReal (Read-Only) -->
+                    <controls:RegisterField Grid.Row="0"
+                                            Grid.Column="1"
+                                            Header="Real Frequency (Hz)"
+                                            Description="Get the real frequency (Hz) of LED0 when in Pwm mode.">
+                      <TextBlock Text="{Binding Led0PwmReal}"
+                                 HorizontalAlignment="Left"
+                                 Margin="0,5,0,0"
+                                 FontSize="14" />
+                    </controls:RegisterField>
+
+                    <!-- Register: Led0PwmDutyCycle (Write) -->
+                    <controls:RegisterField Grid.Row="1"
+                                            Grid.Column="0"
+                                            Header="Duty Cycle (%)"
+                                            Description="Sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.">
+                      <NumericUpDown Value="{Binding Led0PwmDutyCycle}"
+                                     Minimum="0.1"
+                                     Maximum="99.9"
+                                     ClipValueToMinMax="True"
+                                     Increment="0.1"
+                                     FormatString="F2"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
+
+                    <!-- Register: Led0PwmDutyCycleReal (Read-Only) -->
+                    <controls:RegisterField Grid.Row="1"
+                                            Grid.Column="1"
+                                            Header="Real Duty Cycle (%)"
+                                            Description="Get the real duty cycle (%) of LED0 when in Pwm mode.">
+                      <TextBlock Text="{Binding Led0PwmDutyCycleReal}"
+                                 HorizontalAlignment="Left"
+                                 Margin="0,5,0,0"
+                                 FontSize="14" />
+                    </controls:RegisterField>
+
+                    <!-- Register: Led0PwmPulseCounter (Write) -->
+                    <controls:RegisterField Grid.Row="2"
+                                            Grid.Column="0"
+                                            Header="Number of pulses"
+                                            Description="Sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led0PwmPulseCounter}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
+                  </Grid>
+
+                  <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,*,*" IsVisible="{Binding IsLed0IntervalMode}">
+                    <!-- Register: Led0PulseTimeOn (Write) -->
+                    <controls:RegisterField Grid.Row="0" Grid.Column="0"
+                                            Header="Time ON (ms)"
+                                            Description="Sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led0PulseTimeOn}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
+
+                    <!-- Register: Led0PulseTimeOff (Write) -->
+                    <controls:RegisterField Grid.Row="0" Grid.Column="1"
+                                            Header="Time OFF (ms)"
+                                            Description="Sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led0PulseTimeOff}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
+
+                    <!-- Register: Led0PulseTimePulseCounter (Write) -->
+                    <controls:RegisterField Grid.Row="0" Grid.Column="2"
+                                            Header="Number of pulses"
+                                            Description="Sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led0PulseTimePulseCounter}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
+
+                    <!-- Register: Led0PulseRepeatCounter (Write) -->
+                    <controls:RegisterField Grid.Row="1" Grid.Column="0"
+                                            Header="Number of repetitions"
+                                            Description="Sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led0PulseRepeatCounter}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
+
+                    <!-- Register: Led0PulseTimeTail (Write) -->
+                    <controls:RegisterField Grid.Row="1" Grid.Column="1"
+                                            Header="Time between repetitions (ms)"
+                                            Description="Sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led0PulseTimeTail}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
+                  </Grid>
 
                   <!-- Register: AuxDigitalOutputState (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">AuxDigitalOutputState</Label>
-                  <LucideIcon Kind="Info" Size="16"
-                              Foreground="{Binding IconColor}"
-                              VerticalAlignment="Top">
-                    <ToolTip.Tip>Write the state of the auxiliary digital output bit.</ToolTip.Tip>
-                  </LucideIcon>
-                </StackPanel>
-                <CheckBox IsChecked="{Binding IsAux0SetEnabled_AuxDigitalOutputState}"
-                          IsEnabled="True">
-                  Aux0Set
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsAux1SetEnabled_AuxDigitalOutputState}"
-                          IsEnabled="True">
-                  Aux1Set
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsAux0ClearEnabled_AuxDigitalOutputState}"
-                          IsEnabled="True">
-                  Aux0Clear
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsAux1ClearEnabled_AuxDigitalOutputState}"
-                          IsEnabled="True">
-                  Aux1Clear
-                </CheckBox>
-              </StackPanel>
+                  <controls:RegisterField Header="AuxDigitalOutputState"
+                                              Description="Write the state of the auxiliary digital output bits.">
+                    <StackPanel Orientation="Vertical" Spacing="10">
+                      <CheckBox IsChecked="{Binding IsAux0SetEnabled_AuxDigitalOutputState}"
+                                IsEnabled="True">
+                        Aux0Set
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsAux1SetEnabled_AuxDigitalOutputState}"
+                                IsEnabled="True">
+                        Aux1Set
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsAux0ClearEnabled_AuxDigitalOutputState}"
+                                IsEnabled="True">
+                        Aux0Clear
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsAux1ClearEnabled_AuxDigitalOutputState}"
+                                IsEnabled="True">
+                        Aux1Clear
+                      </CheckBox>
+                    </StackPanel>
+                  </controls:RegisterField>
               
-              
-              <!-- Register: DigitalInputTrigger (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">DigitalInputTrigger</Label>
-                  <LucideIcon Kind="Info" Size="16"
-                              Foreground="{Binding IconColor}"
-                              VerticalAlignment="Top">
-                    <ToolTip.Tip>Configuration of the digital inputs pins behavior.</ToolTip.Tip>
-                  </LucideIcon>
-                </StackPanel>
-                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
-                  <TextBlock Grid.Row="0" Grid.Column="0"
-                             Text="DI0Trigger:"
-                             VerticalAlignment="Center"
-                             Margin="0,5,10,5" />
-                  <ComboBox Grid.Row="0" Grid.Column="1"
-                            SelectedItem="{Binding DigitalInputTrigger,
-                                     Converter={StaticResource PayloadFieldConverter},
-                                     ConverterParameter='DI0Trigger'}"
-                            Width="200"
-                            HorizontalAlignment="Left">
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led0EnablePower" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableBehavior" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableLed" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led1EnablePower" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableBehavior" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableLed" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.None" />
-                  </ComboBox>
-                  <TextBlock Grid.Row="1" Grid.Column="0"
-                             Text="DI1Trigger:"
-                             VerticalAlignment="Center"
-                             Margin="0,5,10,5" />
-                  <ComboBox Grid.Row="1" Grid.Column="1"
-                            SelectedItem="{Binding DigitalInputTrigger,
-                                     Converter={StaticResource PayloadFieldConverter},
-                                     ConverterParameter='DI1Trigger'}"
-                            Width="200"
-                            HorizontalAlignment="Left">
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led0EnablePower" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableBehavior" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableLed" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led1EnablePower" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableBehavior" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableLed" />
-                    <x:Static Member="local:DigitalInputTriggerConfig.None" />
-                  </ComboBox>
-                </Grid>
-              </StackPanel>
-              <!-- Register: DigitalOutputState (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">DigitalOutputState</Label>
-                  <LucideIcon Kind="Info" Size="16"
-                              Foreground="{Binding IconColor}"
-                              VerticalAlignment="Top">
-                    <ToolTip.Tip>Write the state of digital output lines.</ToolTip.Tip>
-                  </LucideIcon>
-                </StackPanel>
-                <CheckBox IsChecked="{Binding IsDO0SetEnabled_DigitalOutputState}"
-                          IsEnabled="True">
-                  DO0Set
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsDO1SetEnabled_DigitalOutputState}"
-                          IsEnabled="True">
-                  DO1Set
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsDO0ClearEnabled_DigitalOutputState}"
-                          IsEnabled="True">
-                  DO0Clear
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsDO1ClearEnabled_DigitalOutputState}"
-                          IsEnabled="True">
-                  DO1Clear
-                </CheckBox>
-              </StackPanel>
-              
-              <!-- Register: EnableLed (Write, Event) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">EnableLed</Label>
-                  <LucideIcon Kind="Info" Size="16"
-                              Foreground="{Binding IconColor}"
-                              VerticalAlignment="Top">
-                    <ToolTip.Tip>Enables/disables the LEDs.</ToolTip.Tip>
-                  </LucideIcon>
-                </StackPanel>
-                <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnableLed}"
-                          IsEnabled="True">
-                  Led0On
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsLed1OnEnabled_EnableLed}"
-                          IsEnabled="True">
-                  Led1On
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsLed0OffEnabled_EnableLed}"
-                          IsEnabled="True">
-                  Led0Off
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsLed1OffEnabled_EnableLed}"
-                          IsEnabled="True">
-                  Led1Off
-                </CheckBox>
-              </StackPanel>
-              <!-- Register: EnableLedMode (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">EnableLedMode</Label>
-                  <LucideIcon Kind="Info" Size="16"
-                              Foreground="{Binding IconColor}"
-                              VerticalAlignment="Top">
-                    <ToolTip.Tip>Start/stop the LEDs according to the pulse configuration.</ToolTip.Tip>
-                  </LucideIcon>
-                </StackPanel>
-                <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnableLedMode}"
-                          IsEnabled="True">
-                  Led0On
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsLed1OnEnabled_EnableLedMode}"
-                          IsEnabled="True">
-                  Led1On
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsLed0OffEnabled_EnableLedMode}"
-                          IsEnabled="True">
-                  Led0Off
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsLed1OffEnabled_EnableLedMode}"
-                          IsEnabled="True">
-                  Led1Off
-                </CheckBox>
-              </StackPanel>
-              <!-- Register: EnablePower (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">EnablePower</Label>
-                  <LucideIcon Kind="Info" Size="16"
-                              Foreground="{Binding IconColor}"
-                              VerticalAlignment="Top">
-                    <ToolTip.Tip>Control the enable of both LEDs' power supply.</ToolTip.Tip>
-                  </LucideIcon>
-                </StackPanel>
-                <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnablePower}"
-                          IsEnabled="True">
-                  Led0On
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsLed1OnEnabled_EnablePower}"
-                          IsEnabled="True">
-                  Led1On
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsLed0OffEnabled_EnablePower}"
-                          IsEnabled="True">
-                  Led0Off
-                </CheckBox>
-                <CheckBox IsChecked="{Binding IsLed1OffEnabled_EnablePower}"
-                          IsEnabled="True">
-                  Led1Off
-                </CheckBox>
-              </StackPanel>
+                  <!-- Register: DigitalInputTrigger (Write) -->
+                  <controls:RegisterField Header="DigitalInputTrigger"
+                                              Description="Configuration of the digital inputs pins behavior.">
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                      <TextBlock Grid.Row="0" Grid.Column="0"
+                                 Text="DI0Trigger:"
+                                 VerticalAlignment="Center"
+                                 Margin="0,5,10,5" />
+                      <ComboBox Grid.Row="0" Grid.Column="1"
+                                SelectedItem="{Binding DigitalInputTrigger,
+                                         Converter={StaticResource PayloadFieldConverter},
+                                         ConverterParameter='DI0Trigger'}"
+                                Width="200"
+                                HorizontalAlignment="Left">
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnablePower" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableBehavior" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableLed" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnablePower" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableBehavior" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableLed" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.None" />
+                      </ComboBox>
+                      <TextBlock Grid.Row="1" Grid.Column="0"
+                                 Text="DI1Trigger:"
+                                 VerticalAlignment="Center"
+                                 Margin="0,5,10,5" />
+                      <ComboBox Grid.Row="1" Grid.Column="1"
+                                SelectedItem="{Binding DigitalInputTrigger,
+                                         Converter={StaticResource PayloadFieldConverter},
+                                         ConverterParameter='DI1Trigger'}"
+                                Width="200"
+                                HorizontalAlignment="Left">
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnablePower" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableBehavior" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableLed" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnablePower" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableBehavior" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableLed" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.None" />
+                      </ComboBox>
+                    </Grid>
+                  </controls:RegisterField>
 
+                  <!-- Register: DigitalOutputState (Write) -->
+                  <controls:RegisterField Header="DigitalOutputState"
+                                              Description="Write the state of digital output lines.">
+                    <StackPanel Orientation="Vertical" Spacing="10">
+                      <CheckBox IsChecked="{Binding IsDO0SetEnabled_DigitalOutputState}"
+                                IsEnabled="True">
+                        DO0Set
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsDO1SetEnabled_DigitalOutputState}"
+                                IsEnabled="True">
+                        DO1Set
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsDO0ClearEnabled_DigitalOutputState}"
+                                IsEnabled="True">
+                        DO0Clear
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsDO1ClearEnabled_DigitalOutputState}"
+                                IsEnabled="True">
+                        DO1Clear
+                      </CheckBox>
+                    </StackPanel>
+                  </controls:RegisterField>
+              
+                  <!-- Register: EnableLed (Write, Event) -->
+                  <controls:RegisterField Header="EnableLed"
+                                              Description="Enables/disables the LEDs.">
+                    <StackPanel Orientation="Vertical" Spacing="10">
+                      <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnableLed}"
+                                IsEnabled="True">
+                        Led0On
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsLed1OnEnabled_EnableLed}"
+                                IsEnabled="True">
+                        Led1On
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsLed0OffEnabled_EnableLed}"
+                                IsEnabled="True">
+                        Led0Off
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsLed1OffEnabled_EnableLed}"
+                                IsEnabled="True">
+                        Led1Off
+                      </CheckBox>
+                    </StackPanel>
+                  </controls:RegisterField>
+
+              <!-- Register: EnableLedMode (Write) -->
+                  <controls:RegisterField Header="EnableLedMode"
+                                              Description="Start/stop the LEDs according to the pulse configuration.">
+                    <StackPanel Orientation="Vertical" Spacing="10">
+                      <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnableLedMode}"
+                                IsEnabled="True">
+                        Led0On
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsLed1OnEnabled_EnableLedMode}"
+                                IsEnabled="True">
+                        Led1On
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsLed0OffEnabled_EnableLedMode}"
+                                IsEnabled="True">
+                        Led0Off
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsLed1OffEnabled_EnableLedMode}"
+                                IsEnabled="True">
+                        Led1Off
+                      </CheckBox>
+                    </StackPanel>
+                  </controls:RegisterField>
+
+                  <!-- Register: EnablePower (Write) -->
+                  <controls:RegisterField Header="EnablePower"
+                                              Description="Control the enable of both LEDs' power supply.">
+                    <StackPanel Orientation="Vertical" Spacing="10">
+                      <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnablePower}"
+                                IsEnabled="True">
+                        Led0On
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsLed1OnEnabled_EnablePower}"
+                                IsEnabled="True">
+                        Led1On
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsLed0OffEnabled_EnablePower}"
+                                IsEnabled="True">
+                        Led0Off
+                      </CheckBox>
+                      <CheckBox IsChecked="{Binding IsLed1OffEnabled_EnablePower}"
+                                IsEnabled="True">
+                        Led1Off
+                      </CheckBox>
+                    </StackPanel>
+                  </controls:RegisterField>
 
                 </StackPanel>
               </ScrollViewer>
@@ -620,19 +515,12 @@
             <!-- LED1 Column -->
             <TabItem Header="LED Array 1" FontSize="20" FontWeight="SemiBold">
               <ScrollViewer>
-                <StackPanel Spacing="20"
+                <StackPanel Spacing="10"
                             Background="{Binding SurfaceBackground}"
                             controls:GroupBox.SurfaceBackground="{Binding SurfaceBackground}">
                   <!-- Register: PulseMode (Write) -->
-                  <StackPanel Orientation="Vertical" Spacing="10">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                      <Label FontWeight="Bold" FontSize="14" Padding="0">LED1 Pulse Mode</Label>
-                      <LucideIcon Kind="Info" Size="16"
-                                  Foreground="{Binding IconColor}"
-                                  VerticalAlignment="Top">
-                        <ToolTip.Tip>Sets the pulse mode used by the LEDs.</ToolTip.Tip>
-                      </LucideIcon>
-                    </StackPanel>
+                  <controls:RegisterField Header="LED1 Pulse Mode"
+                                              Description="Sets the pulse mode used by the LEDs.">
                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
                       <ComboBox Grid.Row="0" Grid.Column="1"
                                 SelectedItem="{Binding Led1SelectedPulseMode}"
@@ -655,220 +543,143 @@
                         <x:Static Member="local:PulseModeConfig.PulseTime" />
                       </ComboBox>
                     </Grid>
-                  </StackPanel>
-                  
-                                    
-                  <!-- <controls:GroupBox Header="PWM mode" HorizontalAlignment="Stretch" IsVisible="{Binding IsLed1PwmMode}"> -->
-                    <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*,*" IsVisible="{Binding IsLed1PwmMode}">
-                      <!-- Register: Led1PwmFrequency (Write) -->
-                      <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Frequency (Hz)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led1PwmFrequency}"
-                                       Minimum="0.5"
-                                       Maximum="2000"
-                                       ClipValueToMinMax="True"
-                                       Increment="0.1"
-                                       FormatString="F2"
-                                       Width="200"
-                                       HorizontalAlignment="Left"/>
-                      </StackPanel>
-                      <!-- Register: Led1PwmReal (Read-Only) -->
-                      <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Real Frequency (Hz)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Get the real frequency (Hz) of LED1 when in Pwm mode.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <TextBlock Text="{Binding Led1PwmReal}"
-                                   HorizontalAlignment="Left"
-                                   Margin="0,5,0,0"
-                                   FontSize="14" />
-                      </StackPanel>
-                      <!-- Register: Led1PwmDutyCycle (Write) -->
-                      <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Duty Cycle (%)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led1PwmDutyCycle}"
-                                       Minimum="0.1"
-                                       Maximum="99.9"
-                                       ClipValueToMinMax="True"
-                                       Increment="0.1"
-                                       FormatString="F2"
-                                       Width="200"
-                                       HorizontalAlignment="Left"/>
-                      </StackPanel>
-                      <!-- Register: Led1PwmDutyCycleReal (Read-Only) -->
-                      <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Real Duty Cycle (%)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Get the real duty cycle (%) of LED1 when in Pwm mode.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <TextBlock Text="{Binding Led1PwmDutyCycleReal}"
-                                   HorizontalAlignment="Left"
-                                   Margin="0,5,0,0"
-                                   FontSize="14" />
-                      </StackPanel>
-                      <!-- Register: Led1PwmPulseCounter (Write) -->
-                      <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Vertical" Spacing="10" Margin="0,0,20,0">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Number of pulses</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led1PwmPulseCounter}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"/>
-                      </StackPanel>
-                    </Grid>
-                  <!-- </controls:GroupBox> -->
-                  
-                  <!-- <controls:GroupBox Header="Interval mode" IsVisible="{Binding IsLed1IntervalMode}"> -->
-                    <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,*,*" IsVisible="{Binding IsLed1IntervalMode}">
-                      <!-- Register: Led1PulseTimeOn (Write) -->
-                      <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Time ON (ms)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led1PulseTimeOn}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"
-                                       Margin="0,0,0,0" />
-                      </StackPanel>
-                      <!-- Register: Led1PulseTimeOff (Write) -->
-                      <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Time OFF (ms)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led1PulseTimeOff}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"
-                                       Margin="0,0,0,0" />
-                      </StackPanel>
-                      <!-- Register: Led1PulseTimePulseCounter (Write) -->
-                      <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical" Spacing="10">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Number of pulses</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led1PulseTimePulseCounter}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"
-                                       Margin="0,0,0,0" />
-                      </StackPanel>
-                      <!-- Register: Led1PulseRepeatCounter (Write) -->
-                      <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="10">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Number of repetitions</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led1PulseRepeatCounter}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"
-                                       Margin="0,0,0,0" />
-                      </StackPanel>
+                  </controls:RegisterField>
 
-                      <!-- Register: Led1PulseTimeTail (Write) -->
-                      <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="10">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                          <Label FontWeight="Bold" FontSize="14" Padding="0">Period before repeat (ms)</Label>
-                          <LucideIcon Kind="Info" Size="16"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                            <ToolTip.Tip>Sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </LucideIcon>
-                        </StackPanel>
-                        <NumericUpDown Value="{Binding Led1PulseTimeTail}"
-                                       Minimum="1"
-                                       Maximum="65535"
-                                       ClipValueToMinMax="True"
-                                       Increment="1"
-                                       FormatString="F0"
-                                       Width="200"
-                                       HorizontalAlignment="Left"
-                                       Margin="0,0,0,0" />
-                      </StackPanel>
-                    </Grid>
-                  <!-- </controls:GroupBox> -->
-                  
-                  
-                  
-                  
+                  <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*,*" IsVisible="{Binding IsLed1PwmMode}">
+                    <!-- Register: Led1PwmFrequency (Write) -->
+                    <controls:RegisterField Grid.Row="0" Grid.Column="0"
+                                            Header="Frequency (Hz)"
+                                            Description="Sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.">
+                      <NumericUpDown Value="{Binding Led1PwmFrequency}"
+                                     Minimum="0.5"
+                                     Maximum="2000"
+                                     ClipValueToMinMax="True"
+                                     Increment="0.1"
+                                     FormatString="F2"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
 
+                    <!-- Register: Led1PwmReal (Read-Only) -->
+                    <controls:RegisterField Grid.Row="0" Grid.Column="1"
+                                            Header="Real Frequency (Hz)"
+                                            Description="Get the real frequency (Hz) of LED1 when in Pwm mode.">
+                      <TextBlock Text="{Binding Led1PwmReal}"
+                                 HorizontalAlignment="Left"
+                                 Margin="0,5,0,0"
+                                 FontSize="14" />
+                    </controls:RegisterField>
 
+                    <!-- Register: Led1PwmDutyCycle (Write) -->
+                    <controls:RegisterField Grid.Row="1" Grid.Column="0"
+                                            Header="Duty Cycle (%)"
+                                            Description="Sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.">
+                      <NumericUpDown Value="{Binding Led1PwmDutyCycle}"
+                                     Minimum="0.1"
+                                     Maximum="99.9"
+                                     ClipValueToMinMax="True"
+                                     Increment="0.1"
+                                     FormatString="F2"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
 
+                    <!-- Register: Led1PwmDutyCycleReal (Read-Only) -->
+                    <controls:RegisterField Grid.Row="1" Grid.Column="1"
+                                            Header="Real Duty Cycle (%)"
+                                            Description="Get the real duty cycle (%) of LED1 when in Pwm mode.">
+                      <TextBlock Text="{Binding Led1PwmDutyCycleReal}"
+                                 HorizontalAlignment="Left"
+                                 Margin="0,5,0,0"
+                                 FontSize="14" />
+                    </controls:RegisterField>
 
+                    <!-- Register: Led1PwmPulseCounter (Write) -->
+                    <controls:RegisterField Grid.Row="2" Grid.Column="0"
+                                            Header="Number of pulses"
+                                            Description="Sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led1PwmPulseCounter}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
+                  </Grid>
 
+                  <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,*,*" IsVisible="{Binding IsLed1IntervalMode}">
+                    <!-- Register: Led1PulseTimeOn (Write) -->
+                    <controls:RegisterField Grid.Row="0" Grid.Column="0"
+                                            Header="Time ON (ms)"
+                                            Description="Sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led1PulseTimeOn}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
 
+                    <!-- Register: Led1PulseTimeOff (Write) -->
+                    <controls:RegisterField Grid.Row="0" Grid.Column="1"
+                                            Header="Time OFF (ms)"
+                                            Description="Sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led1PulseTimeOff}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
 
+                    <!-- Register: Led1PulseTimePulseCounter (Write) -->
+                    <controls:RegisterField Grid.Row="0" Grid.Column="2"
+                                            Header="Number of pulses"
+                                            Description="Sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led1PulseTimePulseCounter}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
 
+                    <!-- Register: Led1PulseRepeatCounter (Write) -->
+                    <controls:RegisterField Grid.Row="1" Grid.Column="0"
+                                            Header="Number of repetitions"
+                                            Description="Sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led1PulseRepeatCounter}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
 
-
+                    <!-- Register: Led1PulseTimeTail (Write) -->
+                    <controls:RegisterField Grid.Row="1" Grid.Column="1"
+                                            Header="Time between repetitions (ms)"
+                                            Description="Sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.">
+                      <NumericUpDown Value="{Binding Led1PulseTimeTail}"
+                                     Minimum="1"
+                                     Maximum="65535"
+                                     ClipValueToMinMax="True"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="{StaticResource RegisterInputWidth}"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
+                  </Grid>
                 </StackPanel>
               </ScrollViewer>
             </TabItem>
@@ -876,19 +687,12 @@
             <!-- Digital & Power Column -->
             <TabItem Header="Digital &amp; Power" FontSize="20" FontWeight="SemiBold">
               <ScrollViewer>
-                <StackPanel Spacing="20"
+                <StackPanel Spacing="10"
                             Background="{Binding SurfaceBackground}"
                             controls:GroupBox.SurfaceBackground="{Binding SurfaceBackground}">
                   <!-- Register: DigitalOutputSync (Write) -->
-                  <StackPanel Orientation="Vertical" Spacing="10">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                      <Label FontWeight="Bold" FontSize="14" Padding="0">Digital Outputs Configuration</Label>
-                      <LucideIcon Kind="Info" Size="16"
-                                  Foreground="{Binding IconColor}"
-                                  VerticalAlignment="Top">
-                        <ToolTip.Tip>Configuration of the digital outputs behavior.</ToolTip.Tip>
-                      </LucideIcon>
-                    </StackPanel>
+                  <controls:RegisterField Header="Digital Outputs Configuration"
+                                              Description="Configuration of the synchronization of the digital outputs with the LEDs state.">
                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
                       <TextBlock Grid.Row="0" Grid.Column="0"
                                  Text="DO0 Config"
@@ -953,18 +757,11 @@
                         <x:Static Member="local:DO1SyncConfig.MimicLed1EnableLed" />
                       </ComboBox>
                     </Grid>
-                  </StackPanel>
+                  </controls:RegisterField>
 
                   <!-- Register: Led0Power (Write) -->
-                  <StackPanel Orientation="Vertical" Spacing="10">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                      <Label FontWeight="Bold" FontSize="14" Padding="0">LED0 Power</Label>
-                      <LucideIcon Kind="Info" Size="16"
-                                  Foreground="{Binding IconColor}"
-                                  VerticalAlignment="Top">
-                        <ToolTip.Tip>Sets the power to LED0, between 1 and 120 (arbitrary units).</ToolTip.Tip>
-                      </LucideIcon>
-                    </StackPanel>
+                  <controls:RegisterField Header="LED Power Configuration"
+                                              Description="Configuration of the power applied to the LEDs.">
                     <NumericUpDown Value="{Binding Led0Power}"
                                    Minimum="1"
                                    Maximum="120"
@@ -974,17 +771,11 @@
                                    Width="200"
                                    HorizontalAlignment="Left"
                                    Margin="0,5,0,0" />
-                  </StackPanel>
+                    </controls:RegisterField>
+
                   <!-- Register: Led1Power (Write) -->
-                  <StackPanel Orientation="Vertical" Spacing="10">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                      <Label FontWeight="Bold" FontSize="14" Padding="0">LED1 Power</Label>
-                      <LucideIcon Kind="Info" Size="16"
-                                  Foreground="{Binding IconColor}"
-                                  VerticalAlignment="Top">
-                        <ToolTip.Tip>Sets the power to LED1, between 1 and 120 (arbitrary units).</ToolTip.Tip>
-                      </LucideIcon>
-                    </StackPanel>
+                  <controls:RegisterField Header="LED1 Power"
+                                              Description="Sets the power to LED1, between 1 and 120 (arbitrary units).">
                     <NumericUpDown Value="{Binding Led1Power}"
                                    Minimum="1"
                                    Maximum="120"
@@ -994,17 +785,11 @@
                                    Width="200"
                                    HorizontalAlignment="Left"
                                    Margin="0,5,0,0" />
-                  </StackPanel>
+                  </controls:RegisterField>
+
                   <!-- Register: AuxLedPower (Write) -->
-                  <StackPanel Orientation="Vertical" Spacing="10">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                      <Label FontWeight="Bold" FontSize="14" Padding="0">Auxiliary LED Power</Label>
-                      <LucideIcon Kind="Info" Size="16"
-                                  Foreground="{Binding IconColor}"
-                                  VerticalAlignment="Top">
-                        <ToolTip.Tip>Sets the power to be applied to auxiliary LED, between 1 and 120.</ToolTip.Tip>
-                      </LucideIcon>
-                    </StackPanel>
+                  <controls:RegisterField Header="Auxiliary LED Power"
+                                              Description="Configuration of the power applied to the auxiliary LED.">
                     <NumericUpDown Value="{Binding AuxLedPower}"
                                    Minimum="1"
                                    Maximum="120"
@@ -1014,7 +799,7 @@
                                    Width="200"
                                    HorizontalAlignment="Left"
                                    Margin="0,5,0,0" />
-                  </StackPanel>
+                    </controls:RegisterField>
                 </StackPanel>
               </ScrollViewer>
             </TabItem>
