@@ -4,9 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:Harp.LedArray.Design.Controls"
              xmlns:conv="clr-namespace:Harp.LedArray.Design.Converters"
-             xmlns:heroIcons="clr-namespace:HeroIconsAvalonia.Controls;assembly=HeroIconsAvalonia"
              xmlns:local="clr-namespace:Harp.LedArray;assembly=Harp.LedArray"
-             xmlns:md="clr-namespace:Markdown.Avalonia;assembly=Markdown.Avalonia"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:vm="clr-namespace:Harp.LedArray.Design.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -43,7 +41,7 @@
                    FontSize="17"
                    Margin="5,0,0,0" />
         <Button Background="Transparent" Command="{Binding ShowAboutCommand}">
-          <heroIcons:HeroIcon Foreground="{Binding IconColor}" Type="QuestionMarkCircle" Width="14"/>
+          <LucideIcon Kind="Info" Size="16" Foreground="{Binding IconColor}" />
         </Button>
       </StackPanel>
         <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Hardware &amp; Software Platform" HorizontalAlignment="Left"
@@ -68,10 +66,10 @@
                             Content="Theme" FontWeight="Normal" FontSize="14"
                             IsChecked="{Binding IsDarkMode}">
           <ToggleSwitch.OnContent>
-            <heroIcons:HeroIcon Foreground="{Binding IconColor}" Type="Moon" Width="16" Height="16" />
+            <LucideIcon Kind="Moon" Size="18" Foreground="{Binding IconColor}" />
           </ToggleSwitch.OnContent>
           <ToggleSwitch.OffContent>
-            <heroIcons:HeroIcon Foreground="{Binding IconColor}" Type="Sun" Width="16" Height="16" />
+            <LucideIcon Kind="Sun" Size="18" Foreground="{Binding IconColor}" />
           </ToggleSwitch.OffContent>
         </ToggleSwitch>
     </Grid>
@@ -108,15 +106,15 @@
                       Spacing="20">
             <TextBlock Text="Select a device" VerticalAlignment="Center" />
             <ComboBox Name="Ports" ItemsSource="{Binding Ports}" SelectedItem="{Binding SelectedPort}"
-                      MinWidth="70" />
+                      MinWidth="70" VerticalAlignment="Center" />
             <Button Command="{Binding LoadDeviceInformation}">
-              <heroIcons:HeroIcon Foreground="{Binding IconColor}" Type="ArrowPath" Width="16" Height="16" />
+              <LucideIcon Kind="RefreshCw" Size="18" Foreground="{Binding IconColor}" />
             </Button>
             <Button Content="{Binding ConnectButtonText}"
                     Command="{Binding ConnectAndGetBaseInfoCommand}" />
             <ToggleButton Grid.Row="0" Grid.Column="2"
                     Command="{Binding ShowMessagesCommand}">
-              <heroIcons:HeroIcon Foreground="{Binding IconColor}" Type="DocumentText" Width="16" Height="16" />
+              <LucideIcon Kind="FileText" Size="18" Foreground="{Binding IconColor}" />
             </ToggleButton>
           </StackPanel>
           <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="25,25,30,*" RowDefinitions="*,*,*"
@@ -136,30 +134,19 @@
           </Grid>
         </Grid>
         <StackPanel Orientation="Horizontal">
-          <TabControl SelectedIndex="1" Margin="0,0,10,0">
-            <!-- Events Column -->
-            <TabItem Header="Event Configuration" FontSize="20" FontWeight="SemiBold">
+          <TabControl SelectedIndex="3" Margin="0,0,10,0">
+            <!-- Control and Events Column -->
+            <TabItem Header="Control and Events" FontSize="20" FontWeight="SemiBold">
               <ScrollViewer>
-                <StackPanel>
-                  <Label FontWeight="Bold" FontSize="14" Padding="0, 10">Enable Device Events</Label>
-                  <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto">
-                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                      <Label FontWeight="Bold" FontSize="14" Padding="0">Enable LED</Label>
-                      <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                          Foreground="{Binding IconColor}" VerticalAlignment="Top">
-                        <ToolTip.Tip>Enable digital input port events</ToolTip.Tip>
-                      </heroIcons:HeroIcon>
-                    </StackPanel>
-                  </Grid>
-                  <!-- Register: EnableEvents (Write) -->
-                  <StackPanel Orientation="Vertical" Spacing="10" Margin="0,0,0,0">
+                <StackPanel Spacing="20" Margin="0,10,0,0">
+                  <StackPanel Orientation="Vertical" Spacing="5">
                     <StackPanel Orientation="Horizontal" Spacing="5">
-
-                      <!-- <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14" -->
-                      <!--                     Foreground="{Binding IconColor}" -->
-                      <!--                     VerticalAlignment="Top"> -->
-                      <!--   <ToolTip.Tip>Specifies all the active events in the device.</ToolTip.Tip> -->
-                      <!-- </heroIcons:HeroIcon> -->
+                      <Label FontWeight="Bold" FontSize="14" Padding="0">Enable Device Events</Label>
+                      <LucideIcon Kind="Info" Size="16" 
+                                  Foreground="{Binding IconColor}"
+                                  VerticalAlignment="Top">
+                        <ToolTip.Tip>Specifies all the active events in the device.</ToolTip.Tip>
+                      </LucideIcon>
                     </StackPanel>
                     <CheckBox IsChecked="{Binding IsEnableLedEnabled}"
                               IsEnabled="True">
@@ -170,6 +157,30 @@
                       DigitalInputState
                     </CheckBox>
                   </StackPanel>
+
+                  <!-- Register: DigitalInputState (Read-Only, Event) -->
+                  <StackPanel Orientation="Vertical" Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                      <Label FontWeight="Bold" FontSize="14" Padding="0">DigitalInputState</Label>
+                      <LucideIcon Kind="Info" Size="16"
+                                  Foreground="{Binding IconColor}"
+                                  VerticalAlignment="Top">
+                        <ToolTip.Tip>State of the digital input pins. An event will be emitted when the value of any digital input pin changes.</ToolTip.Tip>
+                      </LucideIcon>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                      <controls:VisualStatus Status="{Binding IsDI0Enabled_DigitalInputState}"
+                                             Width="15" Height="15" />
+                      <TextBlock Text="DI0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                      <controls:VisualStatus Status="{Binding IsDI1Enabled_DigitalInputState}"
+                                             Width="15" Height="15" />
+                      <TextBlock Text="DI1" VerticalAlignment="Center" />
+                    </StackPanel>
+                  </StackPanel>
+                  
+                  
                 </StackPanel>
               </ScrollViewer>
             </TabItem>
@@ -184,11 +195,11 @@
                   <StackPanel Orientation="Vertical" Spacing="10">
                     <StackPanel Orientation="Horizontal" Spacing="5">
                       <Label FontWeight="Bold" FontSize="14" Padding="0">LED0 Pulse Mode</Label>
-                      <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                          Foreground="{Binding IconColor}"
-                                          VerticalAlignment="Top">
+                      <LucideIcon Kind="Info" Size="16"
+                                  Foreground="{Binding IconColor}"
+                                  VerticalAlignment="Top">
                         <ToolTip.Tip>Sets the pulse mode used by the LEDs.</ToolTip.Tip>
-                      </heroIcons:HeroIcon>
+                      </LucideIcon>
                     </StackPanel>
                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
                       <ComboBox Grid.Row="0" Grid.Column="1"
@@ -215,17 +226,17 @@
                   </StackPanel>
                   
                   
-                  <controls:GroupBox Header="PWM mode" HorizontalAlignment="Stretch" IsVisible="{Binding IsLed0PwmMode}">
-                    <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*,*">
+                  <!-- <controls:GroupBox Header="PWM mode" HorizontalAlignment="Stretch" IsVisible="{Binding IsLed0PwmMode}"> -->
+                    <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*,*" IsVisible="{Binding IsLed0PwmMode}">
                       <!-- Register: Led0PwmFrequency (Write) -->
                       <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                           <Label FontWeight="Bold" FontSize="14" Padding="0">Frequency (Hz)</Label>
-                          <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                              Foreground="{Binding IconColor}"
-                                              VerticalAlignment="Top">
+                          <LucideIcon Kind="Info" Size="16"
+                                      Foreground="{Binding IconColor}"
+                                      VerticalAlignment="Top">
                             <ToolTip.Tip>Sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.</ToolTip.Tip>
-                          </heroIcons:HeroIcon>
+                          </LucideIcon>
                         </StackPanel>
                         <NumericUpDown Value="{Binding Led0PwmFrequency}"
                                        Minimum="0.5"
@@ -240,11 +251,11 @@
                       <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                           <Label FontWeight="Bold" FontSize="14" Padding="0">Real Frequency (Hz)</Label>
-                          <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                              Foreground="{Binding IconColor}"
-                                              VerticalAlignment="Top">
+                          <LucideIcon Kind="Info" Size="16"
+                                      Foreground="{Binding IconColor}"
+                                      VerticalAlignment="Top">
                             <ToolTip.Tip>Get the real frequency (Hz) of LED0 when in Pwm mode.</ToolTip.Tip>
-                          </heroIcons:HeroIcon>
+                          </LucideIcon>
                         </StackPanel>
                         <TextBlock Text="{Binding Led0PwmReal}"
                                    HorizontalAlignment="Left"
@@ -255,11 +266,11 @@
                       <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                           <Label FontWeight="Bold" FontSize="14" Padding="0">Duty Cycle (%)</Label>
-                          <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                              Foreground="{Binding IconColor}"
-                                              VerticalAlignment="Top">
+                          <LucideIcon Kind="Info" Size="16"
+                                      Foreground="{Binding IconColor}"
+                                      VerticalAlignment="Top">
                             <ToolTip.Tip>Sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.</ToolTip.Tip>
-                          </heroIcons:HeroIcon>
+                          </LucideIcon>
                         </StackPanel>
                         <NumericUpDown Value="{Binding Led0PwmDutyCycle}"
                                        Minimum="0.1"
@@ -274,11 +285,11 @@
                       <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                           <Label FontWeight="Bold" FontSize="14" Padding="0">Real Duty Cycle (%)</Label>
-                          <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                              Foreground="{Binding IconColor}"
-                                              VerticalAlignment="Top">
+                          <LucideIcon Kind="Info" Size="16"
+                                      Foreground="{Binding IconColor}"
+                                      VerticalAlignment="Top">
                             <ToolTip.Tip>Get the real duty cycle (%) of LED0 when in Pwm mode.</ToolTip.Tip>
-                          </heroIcons:HeroIcon>
+                          </LucideIcon>
                         </StackPanel>
                         <TextBlock Text="{Binding Led0PwmDutyCycleReal}"
                                    HorizontalAlignment="Left"
@@ -289,11 +300,11 @@
                       <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Vertical" Spacing="10" Margin="0,0,20,0">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                           <Label FontWeight="Bold" FontSize="14" Padding="0">Number of pulses</Label>
-                          <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                              Foreground="{Binding IconColor}"
-                                              VerticalAlignment="Top">
+                          <LucideIcon Kind="Info" Size="16"
+                                      Foreground="{Binding IconColor}"
+                                      VerticalAlignment="Top">
                             <ToolTip.Tip>Sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.</ToolTip.Tip>
-                          </heroIcons:HeroIcon>
+                          </LucideIcon>
                         </StackPanel>
                         <NumericUpDown Value="{Binding Led0PwmPulseCounter}"
                                        Minimum="1"
@@ -305,19 +316,19 @@
                                        HorizontalAlignment="Left"/>
                       </StackPanel>
                     </Grid>
-                  </controls:GroupBox>
+                  <!-- </controls:GroupBox> -->
                   
-                  <controls:GroupBox Header="Interval mode" IsVisible="{Binding IsLed0IntervalMode}">
-                    <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,*,*">
+                  <!-- <controls:GroupBox Header="Interval mode" IsVisible="{Binding IsLed0IntervalMode}"> -->
+                    <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,*,*" IsVisible="{Binding IsLed0IntervalMode}">
                       <!-- Register: Led0PulseTimeOn (Write) -->
                       <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                           <Label FontWeight="Bold" FontSize="14" Padding="0">Time ON (ms)</Label>
-                          <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                              Foreground="{Binding IconColor}"
-                                              VerticalAlignment="Top">
+                          <LucideIcon Kind="Info" Size="16"
+                                      Foreground="{Binding IconColor}"
+                                      VerticalAlignment="Top">
                             <ToolTip.Tip>Sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </heroIcons:HeroIcon>
+                          </LucideIcon>
                         </StackPanel>
                         <NumericUpDown Value="{Binding Led0PulseTimeOn}"
                                        Minimum="1"
@@ -333,11 +344,11 @@
                       <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                           <Label FontWeight="Bold" FontSize="14" Padding="0">Time OFF (ms)</Label>
-                          <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                              Foreground="{Binding IconColor}"
-                                              VerticalAlignment="Top">
+                          <LucideIcon Kind="Info" Size="16"
+                                      Foreground="{Binding IconColor}"
+                                      VerticalAlignment="Top">
                             <ToolTip.Tip>Sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </heroIcons:HeroIcon>
+                          </LucideIcon>
                         </StackPanel>
                         <NumericUpDown Value="{Binding Led0PulseTimeOff}"
                                        Minimum="1"
@@ -353,11 +364,11 @@
                       <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical" Spacing="10">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                           <Label FontWeight="Bold" FontSize="14" Padding="0">Number of pulses</Label>
-                          <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                              Foreground="{Binding IconColor}"
-                                              VerticalAlignment="Top">
+                          <LucideIcon Kind="Info" Size="16"
+                                      Foreground="{Binding IconColor}"
+                                      VerticalAlignment="Top">
                             <ToolTip.Tip>Sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </heroIcons:HeroIcon>
+                          </LucideIcon>
                         </StackPanel>
                         <NumericUpDown Value="{Binding Led0PulseTimePulseCounter}"
                                        Minimum="1"
@@ -373,11 +384,11 @@
                       <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="10">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                           <Label FontWeight="Bold" FontSize="14" Padding="0">Number of repetitions</Label>
-                          <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                              Foreground="{Binding IconColor}"
-                                              VerticalAlignment="Top">
+                          <LucideIcon Kind="Info" Size="16"
+                                      Foreground="{Binding IconColor}"
+                                      VerticalAlignment="Top">
                             <ToolTip.Tip>Sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </heroIcons:HeroIcon>
+                          </LucideIcon>
                         </StackPanel>
                         <NumericUpDown Value="{Binding Led0PulseRepeatCounter}"
                                        Minimum="1"
@@ -394,11 +405,11 @@
                       <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="10">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                           <Label FontWeight="Bold" FontSize="14" Padding="0">Period before repeat (ms)</Label>
-                          <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                              Foreground="{Binding IconColor}"
-                                              VerticalAlignment="Top">
+                          <LucideIcon Kind="Info" Size="16"
+                                      Foreground="{Binding IconColor}"
+                                      VerticalAlignment="Top">
                             <ToolTip.Tip>Sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                          </heroIcons:HeroIcon>
+                          </LucideIcon>
                         </StackPanel>
                         <NumericUpDown Value="{Binding Led0PulseTimeTail}"
                                        Minimum="1"
@@ -411,17 +422,17 @@
                                        Margin="0,0,0,0" />
                       </StackPanel>
                     </Grid>
-                  </controls:GroupBox>
+                  <!-- </controls:GroupBox> -->
 
                   <!-- Register: AuxDigitalOutputState (Write) -->
               <StackPanel Orientation="Vertical" Spacing="10">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                   <Label FontWeight="Bold" FontSize="14" Padding="0">AuxDigitalOutputState</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
+                  <LucideIcon Kind="Info" Size="16"
+                              Foreground="{Binding IconColor}"
+                              VerticalAlignment="Top">
                     <ToolTip.Tip>Write the state of the auxiliary digital output bit.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
+                  </LucideIcon>
                 </StackPanel>
                 <CheckBox IsChecked="{Binding IsAux0SetEnabled_AuxDigitalOutputState}"
                           IsEnabled="True">
@@ -440,56 +451,17 @@
                   Aux1Clear
                 </CheckBox>
               </StackPanel>
-              <!-- Register: AuxLedPower (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">AuxLedPower</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the power to be applied to auxiliary LED, between 1 and 120.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <NumericUpDown Value="{Binding AuxLedPower}"
-                               Minimum="1"
-                               Maximum="120"
-                               ClipValueToMinMax="True"
-                               Increment="1"
-                               FormatString="F0"
-                               Width="200"
-                               HorizontalAlignment="Left"
-                               Margin="0,5,0,0" />
-              </StackPanel>
-              <!-- Register: DigitalInputState (Read-Only, Event) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">DigitalInputState</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                    <ToolTip.Tip>State of the digital input pins. An event will be emitted when the value of any digital input pin changes.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <controls:VisualStatus Status="{Binding IsDI0Enabled_DigitalInputState}"
-                                         Width="15" Height="15" />
-                  <TextBlock Text="DI0" VerticalAlignment="Center" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <controls:VisualStatus Status="{Binding IsDI1Enabled_DigitalInputState}"
-                                         Width="15" Height="15" />
-                  <TextBlock Text="DI1" VerticalAlignment="Center" />
-                </StackPanel>
-              </StackPanel>
+              
+              
               <!-- Register: DigitalInputTrigger (Write) -->
               <StackPanel Orientation="Vertical" Spacing="10">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                   <Label FontWeight="Bold" FontSize="14" Padding="0">DigitalInputTrigger</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
+                  <LucideIcon Kind="Info" Size="16"
+                              Foreground="{Binding IconColor}"
+                              VerticalAlignment="Top">
                     <ToolTip.Tip>Configuration of the digital inputs pins behavior.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
+                  </LucideIcon>
                 </StackPanel>
                 <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
                   <TextBlock Grid.Row="0" Grid.Column="0"
@@ -534,11 +506,11 @@
               <StackPanel Orientation="Vertical" Spacing="10">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                   <Label FontWeight="Bold" FontSize="14" Padding="0">DigitalOutputState</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
+                  <LucideIcon Kind="Info" Size="16"
+                              Foreground="{Binding IconColor}"
+                              VerticalAlignment="Top">
                     <ToolTip.Tip>Write the state of digital output lines.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
+                  </LucideIcon>
                 </StackPanel>
                 <CheckBox IsChecked="{Binding IsDO0SetEnabled_DigitalOutputState}"
                           IsEnabled="True">
@@ -557,58 +529,16 @@
                   DO1Clear
                 </CheckBox>
               </StackPanel>
-              <!-- Register: DigitalOutputSync (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">DigitalOutputSync</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                    <ToolTip.Tip>Configuration of the digital outputs behavior.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
-                  <TextBlock Grid.Row="0" Grid.Column="0"
-                             Text="DO0Sync:"
-                             VerticalAlignment="Center"
-                             Margin="0,5,10,5" />
-                  <ComboBox Grid.Row="0" Grid.Column="1"
-                            SelectedItem="{Binding DigitalOutputSync,
-                                     Converter={StaticResource PayloadFieldConverter},
-                                     ConverterParameter='DO0Sync'}"
-                            Width="200"
-                            HorizontalAlignment="Left">
-                    <x:Static Member="local:DO0SyncConfig.None" />
-                    <x:Static Member="local:DO0SyncConfig.MimicLed0EnablePower" />
-                    <x:Static Member="local:DO0SyncConfig.MimicLed0EnableBehavior" />
-                    <x:Static Member="local:DO0SyncConfig.MimicLed0EnableLed" />
-                  </ComboBox>
-                  <TextBlock Grid.Row="1" Grid.Column="0"
-                             Text="DO1Sync:"
-                             VerticalAlignment="Center"
-                             Margin="0,5,10,5" />
-                  <ComboBox Grid.Row="1" Grid.Column="1"
-                            SelectedItem="{Binding DigitalOutputSync,
-                                     Converter={StaticResource PayloadFieldConverter},
-                                     ConverterParameter='DO1Sync'}"
-                            Width="200"
-                            HorizontalAlignment="Left">
-                    <x:Static Member="local:DO1SyncConfig.None" />
-                    <x:Static Member="local:DO1SyncConfig.MimicLed1EnablePower" />
-                    <x:Static Member="local:DO1SyncConfig.MimicLed1EnableBehavior" />
-                    <x:Static Member="local:DO1SyncConfig.MimicLed1EnableLed" />
-                  </ComboBox>
-                </Grid>
-              </StackPanel>
+              
               <!-- Register: EnableLed (Write, Event) -->
               <StackPanel Orientation="Vertical" Spacing="10">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                   <Label FontWeight="Bold" FontSize="14" Padding="0">EnableLed</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
+                  <LucideIcon Kind="Info" Size="16"
+                              Foreground="{Binding IconColor}"
+                              VerticalAlignment="Top">
                     <ToolTip.Tip>Enables/disables the LEDs.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
+                  </LucideIcon>
                 </StackPanel>
                 <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnableLed}"
                           IsEnabled="True">
@@ -631,11 +561,11 @@
               <StackPanel Orientation="Vertical" Spacing="10">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                   <Label FontWeight="Bold" FontSize="14" Padding="0">EnableLedMode</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
+                  <LucideIcon Kind="Info" Size="16"
+                              Foreground="{Binding IconColor}"
+                              VerticalAlignment="Top">
                     <ToolTip.Tip>Start/stop the LEDs according to the pulse configuration.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
+                  </LucideIcon>
                 </StackPanel>
                 <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnableLedMode}"
                           IsEnabled="True">
@@ -658,11 +588,11 @@
               <StackPanel Orientation="Vertical" Spacing="10">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                   <Label FontWeight="Bold" FontSize="14" Padding="0">EnablePower</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
+                  <LucideIcon Kind="Info" Size="16"
+                              Foreground="{Binding IconColor}"
+                              VerticalAlignment="Top">
                     <ToolTip.Tip>Control the enable of both LEDs' power supply.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
+                  </LucideIcon>
                 </StackPanel>
                 <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnablePower}"
                           IsEnabled="True">
@@ -681,287 +611,264 @@
                   Led1Off
                 </CheckBox>
               </StackPanel>
-              <!-- Register: Led0Power (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led0Power</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the power to LED0, between 1 and 120 (arbitrary units).</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <NumericUpDown Value="{Binding Led0Power}"
-                               Minimum="1"
-                               Maximum="120"
-                               ClipValueToMinMax="True"
-                               Increment="1"
-                               FormatString="F0"
-                               Width="200"
-                               HorizontalAlignment="Left"
-                               Margin="0,5,0,0" />
-              </StackPanel>
-              
-              
-              
-              
-              <!-- Register: PulseMode (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">PulseMode</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the pulse mode used by the LEDs.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
-                  <TextBlock Grid.Row="0" Grid.Column="0"
-                             Text="Led0Mode:"
-                             VerticalAlignment="Center"
-                             Margin="0,5,10,5" />
-                  <ComboBox Grid.Row="0" Grid.Column="1"
-                            SelectedItem="{Binding PulseMode,
-                                     Converter={StaticResource PayloadFieldConverter},
-                                     ConverterParameter='Led0Mode'}"
-                            Width="200"
-                            HorizontalAlignment="Left">
-                    <x:Static Member="local:PulseModeConfig.Pwm" />
-                    <x:Static Member="local:PulseModeConfig.PulseTime" />
-                  </ComboBox>
-                  <TextBlock Grid.Row="1" Grid.Column="0"
-                             Text="Led1Mode:"
-                             VerticalAlignment="Center"
-                             Margin="0,5,10,5" />
-                  <ComboBox Grid.Row="1" Grid.Column="1"
-                            SelectedItem="{Binding PulseMode,
-                                     Converter={StaticResource PayloadFieldConverter},
-                                     ConverterParameter='Led1Mode'}"
-                            Width="200"
-                            HorizontalAlignment="Left">
-                    <x:Static Member="local:PulseModeConfig.Pwm" />
-                    <x:Static Member="local:PulseModeConfig.PulseTime" />
-                  </ComboBox>
-                </Grid>
-              </StackPanel>
+
+
                 </StackPanel>
               </ScrollViewer>
             </TabItem>
-            
+
             <!-- LED1 Column -->
             <TabItem Header="LED Array 1" FontSize="20" FontWeight="SemiBold">
               <ScrollViewer>
-                <StackPanel>
-                  <!-- Register: Led1Power (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led1Power</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
+                <StackPanel Spacing="20"
+                            Background="{Binding SurfaceBackground}"
+                            controls:GroupBox.SurfaceBackground="{Binding SurfaceBackground}">
+                  <!-- Register: PulseMode (Write) -->
+                  <StackPanel Orientation="Vertical" Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                      <Label FontWeight="Bold" FontSize="14" Padding="0">LED1 Pulse Mode</Label>
+                      <LucideIcon Kind="Info" Size="16"
+                                  Foreground="{Binding IconColor}"
+                                  VerticalAlignment="Top">
+                        <ToolTip.Tip>Sets the pulse mode used by the LEDs.</ToolTip.Tip>
+                      </LucideIcon>
+                    </StackPanel>
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                      <ComboBox Grid.Row="0" Grid.Column="1"
+                                SelectedItem="{Binding Led1SelectedPulseMode}"
+                                Width="200"
+                                HorizontalAlignment="Left">
+                        <ComboBox.Resources>
+                          <conv:EnumDisplayConverter x:Key="EnumDisplayConverter">
+                            <conv:EnumDisplayConverter.Mappings>
+                              <system:String x:Key="Pwm">PWM Mode</system:String>
+                              <system:String x:Key="PulseTime">Interval mode</system:String>
+                            </conv:EnumDisplayConverter.Mappings>
+                          </conv:EnumDisplayConverter>
+                        </ComboBox.Resources>
+                        <ComboBox.ItemTemplate>
+                          <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                          </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <x:Static Member="local:PulseModeConfig.Pwm" />
+                        <x:Static Member="local:PulseModeConfig.PulseTime" />
+                      </ComboBox>
+                    </Grid>
+                  </StackPanel>
+                  
+                                    
+                  <!-- <controls:GroupBox Header="PWM mode" HorizontalAlignment="Stretch" IsVisible="{Binding IsLed1PwmMode}"> -->
+                    <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*,*" IsVisible="{Binding IsLed1PwmMode}">
+                      <!-- Register: Led1PwmFrequency (Write) -->
+                      <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                          <Label FontWeight="Bold" FontSize="14" Padding="0">Frequency (Hz)</Label>
+                          <LucideIcon Kind="Info" Size="16"
                                       Foreground="{Binding IconColor}"
                                       VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the power to LED1, between 1 and 120 (arbitrary units).</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <NumericUpDown Value="{Binding Led1Power}"
-                               Minimum="1"
-                               Maximum="120"
-                               ClipValueToMinMax="True"
-                               Increment="1"
-                               FormatString="F0"
-                               Width="200"
-                               HorizontalAlignment="Left"
-                               Margin="0,5,0,0" />
-              </StackPanel>
-              <!-- Register: Led1PulseRepeatCounter (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led1PulseRepeatCounter</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
+                            <ToolTip.Tip>Sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.</ToolTip.Tip>
+                          </LucideIcon>
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding Led1PwmFrequency}"
+                                       Minimum="0.5"
+                                       Maximum="2000"
+                                       ClipValueToMinMax="True"
+                                       Increment="0.1"
+                                       FormatString="F2"
+                                       Width="200"
+                                       HorizontalAlignment="Left"/>
+                      </StackPanel>
+                      <!-- Register: Led1PwmReal (Read-Only) -->
+                      <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                          <Label FontWeight="Bold" FontSize="14" Padding="0">Real Frequency (Hz)</Label>
+                          <LucideIcon Kind="Info" Size="16"
                                       Foreground="{Binding IconColor}"
                                       VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <NumericUpDown Value="{Binding Led1PulseRepeatCounter}"
-                               Minimum="1"
-                               Maximum="65535"
-                               ClipValueToMinMax="True"
-                               Increment="1"
-                               FormatString="F0"
-                               Width="200"
-                               HorizontalAlignment="Left"
-                               Margin="0,5,0,0" />
-              </StackPanel>
-              <!-- Register: Led1PulseTimeOff (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led1PulseTimeOff</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
+                            <ToolTip.Tip>Get the real frequency (Hz) of LED1 when in Pwm mode.</ToolTip.Tip>
+                          </LucideIcon>
+                        </StackPanel>
+                        <TextBlock Text="{Binding Led1PwmReal}"
+                                   HorizontalAlignment="Left"
+                                   Margin="0,5,0,0"
+                                   FontSize="14" />
+                      </StackPanel>
+                      <!-- Register: Led1PwmDutyCycle (Write) -->
+                      <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                          <Label FontWeight="Bold" FontSize="14" Padding="0">Duty Cycle (%)</Label>
+                          <LucideIcon Kind="Info" Size="16"
                                       Foreground="{Binding IconColor}"
                                       VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <NumericUpDown Value="{Binding Led1PulseTimeOff}"
-                               Minimum="1"
-                               Maximum="65535"
-                               ClipValueToMinMax="True"
-                               Increment="1"
-                               FormatString="F0"
-                               Width="200"
-                               HorizontalAlignment="Left"
-                               Margin="0,5,0,0" />
-              </StackPanel>
-              <!-- Register: Led1PulseTimeOn (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led1PulseTimeOn</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
+                            <ToolTip.Tip>Sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.</ToolTip.Tip>
+                          </LucideIcon>
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding Led1PwmDutyCycle}"
+                                       Minimum="0.1"
+                                       Maximum="99.9"
+                                       ClipValueToMinMax="True"
+                                       Increment="0.1"
+                                       FormatString="F2"
+                                       Width="200"
+                                       HorizontalAlignment="Left"/>
+                      </StackPanel>
+                      <!-- Register: Led1PwmDutyCycleReal (Read-Only) -->
+                      <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                          <Label FontWeight="Bold" FontSize="14" Padding="0">Real Duty Cycle (%)</Label>
+                          <LucideIcon Kind="Info" Size="16"
                                       Foreground="{Binding IconColor}"
                                       VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <NumericUpDown Value="{Binding Led1PulseTimeOn}"
-                               Minimum="1"
-                               Maximum="65535"
-                               ClipValueToMinMax="True"
-                               Increment="1"
-                               FormatString="F0"
-                               Width="200"
-                               HorizontalAlignment="Left"
-                               Margin="0,5,0,0" />
-              </StackPanel>
-              <!-- Register: Led1PulseTimePulseCounter (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led1PulseTimePulseCounter</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
+                            <ToolTip.Tip>Get the real duty cycle (%) of LED1 when in Pwm mode.</ToolTip.Tip>
+                          </LucideIcon>
+                        </StackPanel>
+                        <TextBlock Text="{Binding Led1PwmDutyCycleReal}"
+                                   HorizontalAlignment="Left"
+                                   Margin="0,5,0,0"
+                                   FontSize="14" />
+                      </StackPanel>
+                      <!-- Register: Led1PwmPulseCounter (Write) -->
+                      <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Vertical" Spacing="10" Margin="0,0,20,0">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                          <Label FontWeight="Bold" FontSize="14" Padding="0">Number of pulses</Label>
+                          <LucideIcon Kind="Info" Size="16"
                                       Foreground="{Binding IconColor}"
                                       VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <NumericUpDown Value="{Binding Led1PulseTimePulseCounter}"
-                               Minimum="1"
-                               Maximum="65535"
-                               ClipValueToMinMax="True"
-                               Increment="1"
-                               FormatString="F0"
-                               Width="200"
-                               HorizontalAlignment="Left"
-                               Margin="0,5,0,0" />
-              </StackPanel>
-              <!-- Register: Led1PulseTimeTail (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led1PulseTimeTail</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
+                            <ToolTip.Tip>Sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.</ToolTip.Tip>
+                          </LucideIcon>
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding Led1PwmPulseCounter}"
+                                       Minimum="1"
+                                       Maximum="65535"
+                                       ClipValueToMinMax="True"
+                                       Increment="1"
+                                       FormatString="F0"
+                                       Width="200"
+                                       HorizontalAlignment="Left"/>
+                      </StackPanel>
+                    </Grid>
+                  <!-- </controls:GroupBox> -->
+                  
+                  <!-- <controls:GroupBox Header="Interval mode" IsVisible="{Binding IsLed1IntervalMode}"> -->
+                    <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,*,*" IsVisible="{Binding IsLed1IntervalMode}">
+                      <!-- Register: Led1PulseTimeOn (Write) -->
+                      <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                          <Label FontWeight="Bold" FontSize="14" Padding="0">Time ON (ms)</Label>
+                          <LucideIcon Kind="Info" Size="16"
                                       Foreground="{Binding IconColor}"
                                       VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <NumericUpDown Value="{Binding Led1PulseTimeTail}"
-                               Minimum="1"
-                               Maximum="65535"
-                               ClipValueToMinMax="True"
-                               Increment="1"
-                               FormatString="F0"
-                               Width="200"
-                               HorizontalAlignment="Left"
-                               Margin="0,5,0,0" />
-              </StackPanel>
-              <!-- Register: Led1PwmDutyCycle (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led1PwmDutyCycle</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
+                            <ToolTip.Tip>Sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
+                          </LucideIcon>
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding Led1PulseTimeOn}"
+                                       Minimum="1"
+                                       Maximum="65535"
+                                       ClipValueToMinMax="True"
+                                       Increment="1"
+                                       FormatString="F0"
+                                       Width="200"
+                                       HorizontalAlignment="Left"
+                                       Margin="0,0,0,0" />
+                      </StackPanel>
+                      <!-- Register: Led1PulseTimeOff (Write) -->
+                      <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" Spacing="10" Margin="0,0,20,20">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                          <Label FontWeight="Bold" FontSize="14" Padding="0">Time OFF (ms)</Label>
+                          <LucideIcon Kind="Info" Size="16"
                                       Foreground="{Binding IconColor}"
                                       VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <NumericUpDown Value="{Binding Led1PwmDutyCycle}"
-                               Minimum="0.1"
-                               Maximum="99.9"
-                               ClipValueToMinMax="True"
-                               Increment="0.1"
-                               FormatString="F2"
-                               Width="200"
-                               HorizontalAlignment="Left"
-                               Margin="0,5,0,0" />
-              </StackPanel>
-              <!-- Register: Led1PwmFrequency (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led1PwmFrequency</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
+                            <ToolTip.Tip>Sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
+                          </LucideIcon>
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding Led1PulseTimeOff}"
+                                       Minimum="1"
+                                       Maximum="65535"
+                                       ClipValueToMinMax="True"
+                                       Increment="1"
+                                       FormatString="F0"
+                                       Width="200"
+                                       HorizontalAlignment="Left"
+                                       Margin="0,0,0,0" />
+                      </StackPanel>
+                      <!-- Register: Led1PulseTimePulseCounter (Write) -->
+                      <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical" Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                          <Label FontWeight="Bold" FontSize="14" Padding="0">Number of pulses</Label>
+                          <LucideIcon Kind="Info" Size="16"
                                       Foreground="{Binding IconColor}"
                                       VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <NumericUpDown Value="{Binding Led1PwmFrequency}"
-                               Minimum="0.5"
-                               Maximum="2000"
-                               ClipValueToMinMax="True"
-                               Increment="0.1"
-                               FormatString="F2"
-                               Width="200"
-                               HorizontalAlignment="Left"
-                               Margin="0,5,0,0" />
-              </StackPanel>
-              <!-- Register: Led1PwmPulseCounter (Write) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led1PwmPulseCounter</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
+                            <ToolTip.Tip>Sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
+                          </LucideIcon>
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding Led1PulseTimePulseCounter}"
+                                       Minimum="1"
+                                       Maximum="65535"
+                                       ClipValueToMinMax="True"
+                                       Increment="1"
+                                       FormatString="F0"
+                                       Width="200"
+                                       HorizontalAlignment="Left"
+                                       Margin="0,0,0,0" />
+                      </StackPanel>
+                      <!-- Register: Led1PulseRepeatCounter (Write) -->
+                      <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                          <Label FontWeight="Bold" FontSize="14" Padding="0">Number of repetitions</Label>
+                          <LucideIcon Kind="Info" Size="16"
                                       Foreground="{Binding IconColor}"
                                       VerticalAlignment="Top">
-                    <ToolTip.Tip>Sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <NumericUpDown Value="{Binding Led1PwmPulseCounter}"
-                               Minimum="1"
-                               Maximum="65535"
-                               ClipValueToMinMax="True"
-                               Increment="1"
-                               FormatString="F0"
-                               Width="200"
-                               HorizontalAlignment="Left"
-                               Margin="0,5,0,0" />
-              </StackPanel>
-              <!-- Register: Led1PwmReal (Read-Only) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led1PwmReal</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
+                            <ToolTip.Tip>Sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
+                          </LucideIcon>
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding Led1PulseRepeatCounter}"
+                                       Minimum="1"
+                                       Maximum="65535"
+                                       ClipValueToMinMax="True"
+                                       Increment="1"
+                                       FormatString="F0"
+                                       Width="200"
+                                       HorizontalAlignment="Left"
+                                       Margin="0,0,0,0" />
+                      </StackPanel>
+
+                      <!-- Register: Led1PulseTimeTail (Write) -->
+                      <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                          <Label FontWeight="Bold" FontSize="14" Padding="0">Period before repeat (ms)</Label>
+                          <LucideIcon Kind="Info" Size="16"
                                       Foreground="{Binding IconColor}"
                                       VerticalAlignment="Top">
-                    <ToolTip.Tip>Get the real frequency (Hz) of LED1 when in Pwm mode.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <TextBlock Text="{Binding Led1PwmReal}"
-                           HorizontalAlignment="Left"
-                           Margin="0,5,0,0"
-                           FontSize="14" />
-              </StackPanel>
-              <!-- Register: Led1PwmDutyCycleReal (Read-Only) -->
-              <StackPanel Orientation="Vertical" Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Label FontWeight="Bold" FontSize="14" Padding="0">Led1PwmDutyCycleReal</Label>
-                  <heroIcons:HeroIcon Type="InformationCircle" Width="14" Height="14"
-                                      Foreground="{Binding IconColor}"
-                                      VerticalAlignment="Top">
-                    <ToolTip.Tip>Get the real duty cycle (%) of LED1 when in Pwm mode.</ToolTip.Tip>
-                  </heroIcons:HeroIcon>
-                </StackPanel>
-                <TextBlock Text="{Binding Led1PwmDutyCycleReal}"
-                           HorizontalAlignment="Left"
-                           Margin="0,5,0,0"
-                           FontSize="14" />
-              </StackPanel>
+                            <ToolTip.Tip>Sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.</ToolTip.Tip>
+                          </LucideIcon>
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding Led1PulseTimeTail}"
+                                       Minimum="1"
+                                       Maximum="65535"
+                                       ClipValueToMinMax="True"
+                                       Increment="1"
+                                       FormatString="F0"
+                                       Width="200"
+                                       HorizontalAlignment="Left"
+                                       Margin="0,0,0,0" />
+                      </StackPanel>
+                    </Grid>
+                  <!-- </controls:GroupBox> -->
+                  
+                  
+                  
+                  
+
+
+
+
+
+
+
+
+
+
                 </StackPanel>
               </ScrollViewer>
             </TabItem>
@@ -969,8 +876,145 @@
             <!-- Digital & Power Column -->
             <TabItem Header="Digital &amp; Power" FontSize="20" FontWeight="SemiBold">
               <ScrollViewer>
-                <StackPanel>
-                  
+                <StackPanel Spacing="20"
+                            Background="{Binding SurfaceBackground}"
+                            controls:GroupBox.SurfaceBackground="{Binding SurfaceBackground}">
+                  <!-- Register: DigitalOutputSync (Write) -->
+                  <StackPanel Orientation="Vertical" Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                      <Label FontWeight="Bold" FontSize="14" Padding="0">Digital Outputs Configuration</Label>
+                      <LucideIcon Kind="Info" Size="16"
+                                  Foreground="{Binding IconColor}"
+                                  VerticalAlignment="Top">
+                        <ToolTip.Tip>Configuration of the digital outputs behavior.</ToolTip.Tip>
+                      </LucideIcon>
+                    </StackPanel>
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                      <TextBlock Grid.Row="0" Grid.Column="0"
+                                 Text="DO0 Config"
+                                 VerticalAlignment="Center"
+                                 Margin="0,5,10,5" />
+                      <ComboBox Grid.Row="0" Grid.Column="1"
+                                SelectedItem="{Binding DigitalOutputSync,
+                                     Converter={StaticResource PayloadFieldConverter},
+                                     ConverterParameter='DO0Sync'}"
+                                Width="220"
+                                HorizontalAlignment="Left"
+                                Margin="0,5,0,5">
+                        <ComboBox.Resources>
+                          <conv:EnumDisplayConverter x:Key="EnumDisplayConverter">
+                            <conv:EnumDisplayConverter.Mappings>
+                              <system:String x:Key="None">Pure digital output (software controlled)</system:String>
+                              <system:String x:Key="MimicLed0EnablePower">Mimics LED0 Enable Power</system:String>
+                              <system:String x:Key="MimicLed0EnableBehavior">Mimics LED0 Enable Behavior</system:String>
+                              <system:String x:Key="MimicLed0EnableLed">Mimics LED0 Enable LED</system:String>
+                            </conv:EnumDisplayConverter.Mappings>
+                          </conv:EnumDisplayConverter>
+                        </ComboBox.Resources>
+                        <ComboBox.ItemTemplate>
+                          <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                          </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <x:Static Member="local:DO0SyncConfig.None" />
+                        <x:Static Member="local:DO0SyncConfig.MimicLed0EnablePower" />
+                        <x:Static Member="local:DO0SyncConfig.MimicLed0EnableBehavior" />
+                        <x:Static Member="local:DO0SyncConfig.MimicLed0EnableLed" />
+                      </ComboBox>
+                      <TextBlock Grid.Row="1" Grid.Column="0"
+                                 Text="DO1 Config"
+                                 VerticalAlignment="Center"
+                                 Margin="0,5,10,5" />
+                      <ComboBox Grid.Row="1" Grid.Column="1"
+                                SelectedItem="{Binding DigitalOutputSync,
+                                     Converter={StaticResource PayloadFieldConverter},
+                                     ConverterParameter='DO1Sync'}"
+                                Width="220"
+                                HorizontalAlignment="Left"
+                                Margin="0,5,0,5">
+                        <ComboBox.Resources>
+                          <conv:EnumDisplayConverter x:Key="EnumDisplayConverter">
+                            <conv:EnumDisplayConverter.Mappings>
+                              <system:String x:Key="None">Pure digital output (software controlled)</system:String>
+                              <system:String x:Key="MimicLed1EnablePower">Mimics LED1 Enable Power</system:String>
+                              <system:String x:Key="MimicLed1EnableBehavior">Mimics LED1 Enable Behavior</system:String>
+                              <system:String x:Key="MimicLed1EnableLed">Mimics LED1 Enable LED</system:String>
+                            </conv:EnumDisplayConverter.Mappings>
+                          </conv:EnumDisplayConverter>
+                        </ComboBox.Resources>
+                        <ComboBox.ItemTemplate>
+                          <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                          </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <x:Static Member="local:DO1SyncConfig.None" />
+                        <x:Static Member="local:DO1SyncConfig.MimicLed1EnablePower" />
+                        <x:Static Member="local:DO1SyncConfig.MimicLed1EnableBehavior" />
+                        <x:Static Member="local:DO1SyncConfig.MimicLed1EnableLed" />
+                      </ComboBox>
+                    </Grid>
+                  </StackPanel>
+
+                  <!-- Register: Led0Power (Write) -->
+                  <StackPanel Orientation="Vertical" Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                      <Label FontWeight="Bold" FontSize="14" Padding="0">LED0 Power</Label>
+                      <LucideIcon Kind="Info" Size="16"
+                                  Foreground="{Binding IconColor}"
+                                  VerticalAlignment="Top">
+                        <ToolTip.Tip>Sets the power to LED0, between 1 and 120 (arbitrary units).</ToolTip.Tip>
+                      </LucideIcon>
+                    </StackPanel>
+                    <NumericUpDown Value="{Binding Led0Power}"
+                                   Minimum="1"
+                                   Maximum="120"
+                                   ClipValueToMinMax="True"
+                                   Increment="1"
+                                   FormatString="F0"
+                                   Width="200"
+                                   HorizontalAlignment="Left"
+                                   Margin="0,5,0,0" />
+                  </StackPanel>
+                  <!-- Register: Led1Power (Write) -->
+                  <StackPanel Orientation="Vertical" Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                      <Label FontWeight="Bold" FontSize="14" Padding="0">LED1 Power</Label>
+                      <LucideIcon Kind="Info" Size="16"
+                                  Foreground="{Binding IconColor}"
+                                  VerticalAlignment="Top">
+                        <ToolTip.Tip>Sets the power to LED1, between 1 and 120 (arbitrary units).</ToolTip.Tip>
+                      </LucideIcon>
+                    </StackPanel>
+                    <NumericUpDown Value="{Binding Led1Power}"
+                                   Minimum="1"
+                                   Maximum="120"
+                                   ClipValueToMinMax="True"
+                                   Increment="1"
+                                   FormatString="F0"
+                                   Width="200"
+                                   HorizontalAlignment="Left"
+                                   Margin="0,5,0,0" />
+                  </StackPanel>
+                  <!-- Register: AuxLedPower (Write) -->
+                  <StackPanel Orientation="Vertical" Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                      <Label FontWeight="Bold" FontSize="14" Padding="0">Auxiliary LED Power</Label>
+                      <LucideIcon Kind="Info" Size="16"
+                                  Foreground="{Binding IconColor}"
+                                  VerticalAlignment="Top">
+                        <ToolTip.Tip>Sets the power to be applied to auxiliary LED, between 1 and 120.</ToolTip.Tip>
+                      </LucideIcon>
+                    </StackPanel>
+                    <NumericUpDown Value="{Binding AuxLedPower}"
+                                   Minimum="1"
+                                   Maximum="120"
+                                   ClipValueToMinMax="True"
+                                   Increment="1"
+                                   FormatString="F0"
+                                   Width="200"
+                                   HorizontalAlignment="Left"
+                                   Margin="0,5,0,0" />
+                  </StackPanel>
                 </StackPanel>
               </ScrollViewer>
             </TabItem>
