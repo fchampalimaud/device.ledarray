@@ -1,0 +1,57 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Harp.LedArray.Design.Controls"
+                    x:ClassModifier="internal">
+
+  <Design.PreviewWith>
+    <controls:RegisterField Header="Frequency (Hz)"
+                            Description="Sets the frequency of the LED when in PWM mode.">
+      <NumericUpDown Width="200"
+                     Minimum="0.5"
+                     Maximum="2000"
+                     Increment="0.1"
+                     FormatString="F2" />
+    </controls:RegisterField>
+  </Design.PreviewWith>
+
+  <ControlTheme x:Key="{x:Type controls:RegisterField}"
+                TargetType="controls:RegisterField">
+
+    <Setter Property="Margin" Value="0,0,20,16" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Top" />
+
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Spacing="10">
+          <StackPanel Orientation="Horizontal" Spacing="5">
+            <ContentPresenter Content="{TemplateBinding Header}"
+                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                              FontSize="14"
+                              FontWeight="Bold"
+                              VerticalAlignment="Center"
+                              RecognizesAccessKey="True" />
+
+            <LucideIcon Kind="Info"
+                        Size="16"
+                        VerticalAlignment="Top"
+                        Foreground="{TemplateBinding IconForeground}">
+              <ToolTip.Tip>
+                <TextBlock Text="{TemplateBinding Description}"
+                           TextWrapping="Wrap"
+                           MaxWidth="320" />
+              </ToolTip.Tip>
+            </LucideIcon>
+          </StackPanel>
+
+          <ContentPresenter Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            RecognizesAccessKey="True" />
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

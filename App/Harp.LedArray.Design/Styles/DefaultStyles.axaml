@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Harp.LedArray.Design.Controls">
 
   <Design.PreviewWith>
     <Border Padding="20" />
@@ -9,6 +10,7 @@
     <Style.Resources>
       <Color x:Key="BlueAccentColor">#009CDF</Color>
 
+      <!-- GroupBox Styles -->
       <Thickness x:Key="GroupBoxPadding">12,10,12,12</Thickness>
       <x:Double x:Key="GroupBoxHeaderFontSize">14</x:Double>
       <FontWeight x:Key="GroupBoxHeaderFontWeight">SemiBold</FontWeight>
@@ -16,6 +18,18 @@
       <Thickness x:Key="GroupBoxHeaderPadding">6,0,6,0</Thickness>
       <Thickness x:Key="GroupBoxBorderThickness">1</Thickness>
       <SolidColorBrush x:Key="GroupBoxBackground" Color="Transparent" />
+      
+      <!-- RegisterField Styles -->
+      <x:Double x:Key="RegisterInputWidth">200</x:Double>
+      <x:Double x:Key="RegisterWideInputWidth">220</x:Double>
+      <Thickness x:Key="RegisterItemMargin">0,0,20,20</Thickness>
+      
     </Style.Resources>
   </Style>
+
+  <Style Selector="controls|RegisterField">
+    <Setter Property="IconForeground"
+            Value="{ReflectionBinding DataContext.IconColor, RelativeSource={RelativeSource Self}}" />
+  </Style>
+
 </Styles>
