@@ -215,14 +215,12 @@
                                             Grid.Column="0"
                                             Header="Frequency (Hz)"
                                             Description="Sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.">
-                      <NumericUpDown Value="{Binding Led0PwmFrequency}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led0PwmFrequency}"
                                      Minimum="0.5"
                                      Maximum="2000"
-                                     ClipValueToMinMax="True"
                                      Increment="0.1"
-                                     FormatString="F2"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F2"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led0PwmReal (Read-Only) -->
@@ -230,10 +228,8 @@
                                             Grid.Column="1"
                                             Header="Real Frequency (Hz)"
                                             Description="Get the real frequency (Hz) of LED0 when in Pwm mode.">
-                      <TextBlock Text="{Binding Led0PwmReal}"
-                                 HorizontalAlignment="Left"
-                                 Margin="0,5,0,0"
-                                 FontSize="14" />
+                      <TextBlock Classes="register-value"
+                                 Text="{Binding Led0PwmReal}"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led0PwmDutyCycle (Write) -->
@@ -241,14 +237,12 @@
                                             Grid.Column="0"
                                             Header="Duty Cycle (%)"
                                             Description="Sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.">
-                      <NumericUpDown Value="{Binding Led0PwmDutyCycle}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led0PwmDutyCycle}"
                                      Minimum="0.1"
                                      Maximum="99.9"
-                                     ClipValueToMinMax="True"
                                      Increment="0.1"
-                                     FormatString="F2"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F2"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led0PwmDutyCycleReal (Read-Only) -->
@@ -256,10 +250,8 @@
                                             Grid.Column="1"
                                             Header="Real Duty Cycle (%)"
                                             Description="Get the real duty cycle (%) of LED0 when in Pwm mode.">
-                      <TextBlock Text="{Binding Led0PwmDutyCycleReal}"
-                                 HorizontalAlignment="Left"
-                                 Margin="0,5,0,0"
-                                 FontSize="14" />
+                      <TextBlock Classes="register-value"
+                                 Text="{Binding Led0PwmDutyCycleReal}" />
                     </controls:RegisterField>
 
                     <!-- Register: Led0PwmPulseCounter (Write) -->
@@ -267,14 +259,12 @@
                                             Grid.Column="0"
                                             Header="Number of pulses"
                                             Description="Sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led0PwmPulseCounter}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led0PwmPulseCounter}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0"/>
                     </controls:RegisterField>
                   </Grid>
 
@@ -283,70 +273,59 @@
                     <controls:RegisterField Grid.Row="0" Grid.Column="0"
                                             Header="Time ON (ms)"
                                             Description="Sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led0PulseTimeOn}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led0PulseTimeOn}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led0PulseTimeOff (Write) -->
                     <controls:RegisterField Grid.Row="0" Grid.Column="1"
                                             Header="Time OFF (ms)"
                                             Description="Sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led0PulseTimeOff}"
+                      <NumericUpDown Classes="register-input" Value="{Binding Led0PulseTimeOff}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led0PulseTimePulseCounter (Write) -->
                     <controls:RegisterField Grid.Row="0" Grid.Column="2"
                                             Header="Number of pulses"
                                             Description="Sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led0PulseTimePulseCounter}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led0PulseTimePulseCounter}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led0PulseRepeatCounter (Write) -->
                     <controls:RegisterField Grid.Row="1" Grid.Column="0"
                                             Header="Number of repetitions"
                                             Description="Sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led0PulseRepeatCounter}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led0PulseRepeatCounter}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led0PulseTimeTail (Write) -->
                     <controls:RegisterField Grid.Row="1" Grid.Column="1"
                                             Header="Time between repetitions (ms)"
                                             Description="Sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led0PulseTimeTail}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led0PulseTimeTail}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0"/>
                     </controls:RegisterField>
                   </Grid>
 
@@ -550,62 +529,52 @@
                     <controls:RegisterField Grid.Row="0" Grid.Column="0"
                                             Header="Frequency (Hz)"
                                             Description="Sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.">
-                      <NumericUpDown Value="{Binding Led1PwmFrequency}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led1PwmFrequency}"
                                      Minimum="0.5"
                                      Maximum="2000"
-                                     ClipValueToMinMax="True"
                                      Increment="0.1"
-                                     FormatString="F2"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F2"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led1PwmReal (Read-Only) -->
                     <controls:RegisterField Grid.Row="0" Grid.Column="1"
                                             Header="Real Frequency (Hz)"
                                             Description="Get the real frequency (Hz) of LED1 when in Pwm mode.">
-                      <TextBlock Text="{Binding Led1PwmReal}"
-                                 HorizontalAlignment="Left"
-                                 Margin="0,5,0,0"
-                                 FontSize="14" />
+                      <TextBlock Classes="register-value"
+                                 Text="{Binding Led1PwmReal}"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led1PwmDutyCycle (Write) -->
                     <controls:RegisterField Grid.Row="1" Grid.Column="0"
                                             Header="Duty Cycle (%)"
                                             Description="Sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.">
-                      <NumericUpDown Value="{Binding Led1PwmDutyCycle}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led1PwmDutyCycle}"
                                      Minimum="0.1"
                                      Maximum="99.9"
-                                     ClipValueToMinMax="True"
                                      Increment="0.1"
-                                     FormatString="F2"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F2"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led1PwmDutyCycleReal (Read-Only) -->
                     <controls:RegisterField Grid.Row="1" Grid.Column="1"
                                             Header="Real Duty Cycle (%)"
                                             Description="Get the real duty cycle (%) of LED1 when in Pwm mode.">
-                      <TextBlock Text="{Binding Led1PwmDutyCycleReal}"
-                                 HorizontalAlignment="Left"
-                                 Margin="0,5,0,0"
-                                 FontSize="14" />
+                      <TextBlock Classes="register-value"
+                                 Text="{Binding Led1PwmDutyCycleReal}"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led1PwmPulseCounter (Write) -->
                     <controls:RegisterField Grid.Row="2" Grid.Column="0"
                                             Header="Number of pulses"
                                             Description="Sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led1PwmPulseCounter}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led1PwmPulseCounter}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0"/>
                     </controls:RegisterField>
                   </Grid>
 
@@ -614,70 +583,60 @@
                     <controls:RegisterField Grid.Row="0" Grid.Column="0"
                                             Header="Time ON (ms)"
                                             Description="Sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led1PulseTimeOn}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led1PulseTimeOn}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0"/>
                     </controls:RegisterField>
 
                     <!-- Register: Led1PulseTimeOff (Write) -->
                     <controls:RegisterField Grid.Row="0" Grid.Column="1"
                                             Header="Time OFF (ms)"
                                             Description="Sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led1PulseTimeOff}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led1PulseTimeOff}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0" />
                     </controls:RegisterField>
 
                     <!-- Register: Led1PulseTimePulseCounter (Write) -->
                     <controls:RegisterField Grid.Row="0" Grid.Column="2"
                                             Header="Number of pulses"
                                             Description="Sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led1PulseTimePulseCounter}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led1PulseTimePulseCounter}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0" />
                     </controls:RegisterField>
 
                     <!-- Register: Led1PulseRepeatCounter (Write) -->
                     <controls:RegisterField Grid.Row="1" Grid.Column="0"
                                             Header="Number of repetitions"
                                             Description="Sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led1PulseRepeatCounter}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led1PulseRepeatCounter}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0" />
                     </controls:RegisterField>
 
                     <!-- Register: Led1PulseTimeTail (Write) -->
                     <controls:RegisterField Grid.Row="1" Grid.Column="1"
                                             Header="Time between repetitions (ms)"
                                             Description="Sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.">
-                      <NumericUpDown Value="{Binding Led1PulseTimeTail}"
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led1PulseTimeTail}"
                                      Minimum="1"
                                      Maximum="65535"
-                                     ClipValueToMinMax="True"
                                      Increment="1"
-                                     FormatString="F0"
-                                     Width="{StaticResource RegisterInputWidth}"
-                                     HorizontalAlignment="Left" />
+                                     FormatString="F0" />
                     </controls:RegisterField>
                   </Grid>
                 </StackPanel>
@@ -762,43 +721,40 @@
                   <!-- Register: Led0Power (Write) -->
                   <controls:RegisterField Header="LED Power Configuration"
                                               Description="Configuration of the power applied to the LEDs.">
-                    <NumericUpDown Value="{Binding Led0Power}"
+                    <NumericUpDown Classes="register-input"
+                                   Value="{Binding Led0Power}"
                                    Minimum="1"
                                    Maximum="120"
-                                   ClipValueToMinMax="True"
                                    Increment="1"
                                    FormatString="F0"
                                    Width="200"
-                                   HorizontalAlignment="Left"
-                                   Margin="0,5,0,0" />
+                                   HorizontalAlignment="Left" />
                     </controls:RegisterField>
 
                   <!-- Register: Led1Power (Write) -->
                   <controls:RegisterField Header="LED1 Power"
                                               Description="Sets the power to LED1, between 1 and 120 (arbitrary units).">
-                    <NumericUpDown Value="{Binding Led1Power}"
+                    <NumericUpDown Classes="register-input"
+                                   Value="{Binding Led1Power}"
                                    Minimum="1"
                                    Maximum="120"
-                                   ClipValueToMinMax="True"
                                    Increment="1"
                                    FormatString="F0"
                                    Width="200"
-                                   HorizontalAlignment="Left"
-                                   Margin="0,5,0,0" />
+                                   HorizontalAlignment="Left" />
                   </controls:RegisterField>
 
                   <!-- Register: AuxLedPower (Write) -->
                   <controls:RegisterField Header="Auxiliary LED Power"
                                               Description="Configuration of the power applied to the auxiliary LED.">
-                    <NumericUpDown Value="{Binding AuxLedPower}"
+                    <NumericUpDown Classes="register-input"
+                                   Value="{Binding AuxLedPower}"
                                    Minimum="1"
                                    Maximum="120"
-                                   ClipValueToMinMax="True"
                                    Increment="1"
                                    FormatString="F0"
                                    Width="200"
-                                   HorizontalAlignment="Left"
-                                   Margin="0,5,0,0" />
+                                   HorizontalAlignment="Left" />
                     </controls:RegisterField>
                 </StackPanel>
               </ScrollViewer>

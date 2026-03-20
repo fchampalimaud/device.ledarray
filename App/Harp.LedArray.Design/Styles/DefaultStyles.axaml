@@ -27,9 +27,21 @@
     </Style.Resources>
   </Style>
 
+  <Style Selector="NumericUpDown.register-input">
+    <Setter Property="Width" Value="{StaticResource RegisterInputWidth}" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="ClipValueToMinMax" Value="True" />
+  </Style>
+
+  <Style Selector="TextBlock.register-value">
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="Margin" Value="0,5,0,0" />
+    <Setter Property="FontSize" Value="14" />
+  </Style>
+
   <Style Selector="controls|RegisterField">
     <Setter Property="IconForeground"
-            Value="{ReflectionBinding DataContext.IconColor, RelativeSource={RelativeSource Self}}" />
+            Value="{ReflectionBinding IconColor}" />
   </Style>
 
 </Styles>
