@@ -58,6 +58,7 @@ public class LedArrayViewModel : ViewModelBase
     [Reactive] public LedState EnablePower { get; set; }
     [Reactive] public LedState EnableLedMode { get; set; }
     [Reactive] public LedState EnableLed { get; set; }
+    [Reactive] public LedState EnableLedWrite { get; set; }
     [Reactive] public DigitalInputs DigitalInputState { get; set; }
     [Reactive] public DigitalOutputSyncPayload DigitalOutputSync { get; set; }
     [Reactive] public DigitalInputTriggerPayload DigitalInputTrigger { get; set; }
@@ -147,95 +148,41 @@ public class LedArrayViewModel : ViewModelBase
 
     #region LedState_EnablePower Flags
 
-    public bool IsLed0OnEnabled_EnablePower
+    public bool IsLed0Enabled_EnablePower
     {
-        get
-        {
-            return EnablePower.HasFlag(LedState.Led0On);
-        }
+        get => EnablePower.HasFlag(LedState.Led0On);
         set
         {
-            if (value)
-            {
-                EnablePower |= LedState.Led0On;
-            }
-            else
-            {
-                EnablePower &= ~LedState.Led0On;
-            }
+            var newValue = SetExclusiveFlagState(
+                EnablePower,
+                LedState.Led0On,
+                LedState.Led0Off,
+                value);
 
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed0OnEnabled_EnablePower));
-            this.RaisePropertyChanged(nameof(EnablePower));
+            if (EnablePower == newValue)
+                return;
+
+            EnablePower = newValue;
+            this.RaisePropertyChanged(nameof(IsLed0Enabled_EnablePower));
         }
     }
 
-    public bool IsLed1OnEnabled_EnablePower
+    public bool IsLed1Enabled_EnablePower
     {
-        get
-        {
-            return EnablePower.HasFlag(LedState.Led1On);
-        }
+        get => EnablePower.HasFlag(LedState.Led1On);
         set
         {
-            if (value)
-            {
-                EnablePower |= LedState.Led1On;
-            }
-            else
-            {
-                EnablePower &= ~LedState.Led1On;
-            }
+            var newValue = SetExclusiveFlagState(
+                EnablePower,
+                LedState.Led1On,
+                LedState.Led1Off,
+                value);
 
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed1OnEnabled_EnablePower));
-            this.RaisePropertyChanged(nameof(EnablePower));
-        }
-    }
+            if (EnablePower == newValue)
+                return;
 
-    public bool IsLed0OffEnabled_EnablePower
-    {
-        get
-        {
-            return EnablePower.HasFlag(LedState.Led0Off);
-        }
-        set
-        {
-            if (value)
-            {
-                EnablePower |= LedState.Led0Off;
-            }
-            else
-            {
-                EnablePower &= ~LedState.Led0Off;
-            }
-
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed0OffEnabled_EnablePower));
-            this.RaisePropertyChanged(nameof(EnablePower));
-        }
-    }
-
-    public bool IsLed1OffEnabled_EnablePower
-    {
-        get
-        {
-            return EnablePower.HasFlag(LedState.Led1Off);
-        }
-        set
-        {
-            if (value)
-            {
-                EnablePower |= LedState.Led1Off;
-            }
-            else
-            {
-                EnablePower &= ~LedState.Led1Off;
-            }
-
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed1OffEnabled_EnablePower));
-            this.RaisePropertyChanged(nameof(EnablePower));
+            EnablePower = newValue;
+            this.RaisePropertyChanged(nameof(IsLed1Enabled_EnablePower));
         }
     }
 
@@ -243,191 +190,91 @@ public class LedArrayViewModel : ViewModelBase
 
     #region LedState_EnableLedMode Flags
 
-    public bool IsLed0OnEnabled_EnableLedMode
+    public bool IsLed0Enabled_EnableLedMode
     {
-        get
-        {
-            return EnableLedMode.HasFlag(LedState.Led0On);
-        }
+        get => EnableLedMode.HasFlag(LedState.Led0On);
         set
         {
-            if (value)
-            {
-                EnableLedMode |= LedState.Led0On;
-            }
-            else
-            {
-                EnableLedMode &= ~LedState.Led0On;
-            }
+            var newValue = SetExclusiveFlagState(
+                EnableLedMode,
+                LedState.Led0On,
+                LedState.Led0Off,
+                value);
 
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed0OnEnabled_EnableLedMode));
-            this.RaisePropertyChanged(nameof(EnableLedMode));
+            if (EnableLedMode == newValue)
+                return;
+
+            EnableLedMode = newValue;
+            this.RaisePropertyChanged(nameof(IsLed0Enabled_EnableLedMode));
         }
     }
 
-    public bool IsLed1OnEnabled_EnableLedMode
+    public bool IsLed1Enabled_EnableLedMode
     {
-        get
-        {
-            return EnableLedMode.HasFlag(LedState.Led1On);
-        }
+        get => EnableLedMode.HasFlag(LedState.Led1On);
         set
         {
-            if (value)
-            {
-                EnableLedMode |= LedState.Led1On;
-            }
-            else
-            {
-                EnableLedMode &= ~LedState.Led1On;
-            }
+            var newValue = SetExclusiveFlagState(
+                EnableLedMode,
+                LedState.Led1On,
+                LedState.Led1Off,
+                value);
 
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed1OnEnabled_EnableLedMode));
-            this.RaisePropertyChanged(nameof(EnableLedMode));
-        }
-    }
+            if (EnableLedMode == newValue)
+                return;
 
-    public bool IsLed0OffEnabled_EnableLedMode
-    {
-        get
-        {
-            return EnableLedMode.HasFlag(LedState.Led0Off);
-        }
-        set
-        {
-            if (value)
-            {
-                EnableLedMode |= LedState.Led0Off;
-            }
-            else
-            {
-                EnableLedMode &= ~LedState.Led0Off;
-            }
-
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed0OffEnabled_EnableLedMode));
-            this.RaisePropertyChanged(nameof(EnableLedMode));
-        }
-    }
-
-    public bool IsLed1OffEnabled_EnableLedMode
-    {
-        get
-        {
-            return EnableLedMode.HasFlag(LedState.Led1Off);
-        }
-        set
-        {
-            if (value)
-            {
-                EnableLedMode |= LedState.Led1Off;
-            }
-            else
-            {
-                EnableLedMode &= ~LedState.Led1Off;
-            }
-
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed1OffEnabled_EnableLedMode));
-            this.RaisePropertyChanged(nameof(EnableLedMode));
+            EnableLedMode = newValue;
+            this.RaisePropertyChanged(nameof(IsLed1Enabled_EnableLedMode));
         }
     }
 
     #endregion
 
-    #region LedState_EnableLed Flags
+    #region LedState_EnableLed Flags (status/event only)
 
-    public bool IsLed0OnEnabled_EnableLed
+    public bool IsLed0Enabled_EnableLed => EnableLed.HasFlag(LedState.Led0On);
+
+    public bool IsLed1Enabled_EnableLed => EnableLed.HasFlag(LedState.Led1On);
+
+    #endregion
+    
+    #region LedState_EnableLedWrite Flags
+
+    public bool IsLed0Enabled_EnableLedWrite
     {
-        get
-        {
-            return EnableLed.HasFlag(LedState.Led0On);
-        }
+        get => EnableLedWrite.HasFlag(LedState.Led0On);
         set
         {
-            if (value)
-            {
-                EnableLed |= LedState.Led0On;
-            }
-            else
-            {
-                EnableLed &= ~LedState.Led0On;
-            }
+            var newValue = SetExclusiveFlagState(
+                EnableLedWrite,
+                LedState.Led0On,
+                LedState.Led0Off,
+                value);
 
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed0OnEnabled_EnableLed));
-            this.RaisePropertyChanged(nameof(EnableLed));
+            if (EnableLedWrite == newValue)
+                return;
+
+            EnableLedWrite = newValue;
+            this.RaisePropertyChanged(nameof(IsLed0Enabled_EnableLedWrite));
         }
     }
 
-    public bool IsLed1OnEnabled_EnableLed
+    public bool IsLed1Enabled_EnableLedWrite
     {
-        get
-        {
-            return EnableLed.HasFlag(LedState.Led1On);
-        }
+        get => EnableLedWrite.HasFlag(LedState.Led1On);
         set
         {
-            if (value)
-            {
-                EnableLed |= LedState.Led1On;
-            }
-            else
-            {
-                EnableLed &= ~LedState.Led1On;
-            }
+            var newValue = SetExclusiveFlagState(
+                EnableLedWrite,
+                LedState.Led1On,
+                LedState.Led1Off,
+                value);
 
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed1OnEnabled_EnableLed));
-            this.RaisePropertyChanged(nameof(EnableLed));
-        }
-    }
+            if (EnableLedWrite == newValue)
+                return;
 
-    public bool IsLed0OffEnabled_EnableLed
-    {
-        get
-        {
-            return EnableLed.HasFlag(LedState.Led0Off);
-        }
-        set
-        {
-            if (value)
-            {
-                EnableLed |= LedState.Led0Off;
-            }
-            else
-            {
-                EnableLed &= ~LedState.Led0Off;
-            }
-
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed0OffEnabled_EnableLed));
-            this.RaisePropertyChanged(nameof(EnableLed));
-        }
-    }
-
-    public bool IsLed1OffEnabled_EnableLed
-    {
-        get
-        {
-            return EnableLed.HasFlag(LedState.Led1Off);
-        }
-        set
-        {
-            if (value)
-            {
-                EnableLed |= LedState.Led1Off;
-            }
-            else
-            {
-                EnableLed &= ~LedState.Led1Off;
-            }
-
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsLed1OffEnabled_EnableLed));
-            this.RaisePropertyChanged(nameof(EnableLed));
+            EnableLedWrite = newValue;
+            this.RaisePropertyChanged(nameof(IsLed1Enabled_EnableLedWrite));
         }
     }
 
@@ -485,95 +332,41 @@ public class LedArrayViewModel : ViewModelBase
 
     #region AuxDigitalOutputs_AuxDigitalOutputState Flags
 
-    public bool IsAux0SetEnabled_AuxDigitalOutputState
+    public bool IsAux0Enabled_AuxDigitalOutputState
     {
-        get
-        {
-            return AuxDigitalOutputState.HasFlag(AuxDigitalOutputs.Aux0Set);
-        }
+        get => AuxDigitalOutputState.HasFlag(AuxDigitalOutputs.Aux0Set);
         set
         {
-            if (value)
-            {
-                AuxDigitalOutputState |= AuxDigitalOutputs.Aux0Set;
-            }
-            else
-            {
-                AuxDigitalOutputState &= ~AuxDigitalOutputs.Aux0Set;
-            }
+            var newValue = SetExclusiveFlagState(
+                AuxDigitalOutputState,
+                AuxDigitalOutputs.Aux0Set,
+                AuxDigitalOutputs.Aux0Clear,
+                value);
 
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsAux0SetEnabled_AuxDigitalOutputState));
-            this.RaisePropertyChanged(nameof(AuxDigitalOutputState));
+            if (AuxDigitalOutputState == newValue)
+                return;
+
+            AuxDigitalOutputState = newValue;
+            this.RaisePropertyChanged(nameof(IsAux0Enabled_AuxDigitalOutputState));
         }
     }
 
-    public bool IsAux1SetEnabled_AuxDigitalOutputState
+    public bool IsAux1Enabled_AuxDigitalOutputState
     {
-        get
-        {
-            return AuxDigitalOutputState.HasFlag(AuxDigitalOutputs.Aux1Set);
-        }
+        get => AuxDigitalOutputState.HasFlag(AuxDigitalOutputs.Aux1Set);
         set
         {
-            if (value)
-            {
-                AuxDigitalOutputState |= AuxDigitalOutputs.Aux1Set;
-            }
-            else
-            {
-                AuxDigitalOutputState &= ~AuxDigitalOutputs.Aux1Set;
-            }
+            var newValue = SetExclusiveFlagState(
+                AuxDigitalOutputState,
+                AuxDigitalOutputs.Aux1Set,
+                AuxDigitalOutputs.Aux1Clear,
+                value);
 
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsAux1SetEnabled_AuxDigitalOutputState));
-            this.RaisePropertyChanged(nameof(AuxDigitalOutputState));
-        }
-    }
+            if (AuxDigitalOutputState == newValue)
+                return;
 
-    public bool IsAux0ClearEnabled_AuxDigitalOutputState
-    {
-        get
-        {
-            return AuxDigitalOutputState.HasFlag(AuxDigitalOutputs.Aux0Clear);
-        }
-        set
-        {
-            if (value)
-            {
-                AuxDigitalOutputState |= AuxDigitalOutputs.Aux0Clear;
-            }
-            else
-            {
-                AuxDigitalOutputState &= ~AuxDigitalOutputs.Aux0Clear;
-            }
-
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsAux0ClearEnabled_AuxDigitalOutputState));
-            this.RaisePropertyChanged(nameof(AuxDigitalOutputState));
-        }
-    }
-
-    public bool IsAux1ClearEnabled_AuxDigitalOutputState
-    {
-        get
-        {
-            return AuxDigitalOutputState.HasFlag(AuxDigitalOutputs.Aux1Clear);
-        }
-        set
-        {
-            if (value)
-            {
-                AuxDigitalOutputState |= AuxDigitalOutputs.Aux1Clear;
-            }
-            else
-            {
-                AuxDigitalOutputState &= ~AuxDigitalOutputs.Aux1Clear;
-            }
-
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsAux1ClearEnabled_AuxDigitalOutputState));
-            this.RaisePropertyChanged(nameof(AuxDigitalOutputState));
+            AuxDigitalOutputState = newValue;
+            this.RaisePropertyChanged(nameof(IsAux1Enabled_AuxDigitalOutputState));
         }
     }
 
@@ -581,95 +374,41 @@ public class LedArrayViewModel : ViewModelBase
 
     #region DigitalOutputs_DigitalOutputState Flags
 
-    public bool IsDO0SetEnabled_DigitalOutputState
+    public bool IsDO0Enabled_DigitalOutputState
     {
-        get
-        {
-            return DigitalOutputState.HasFlag(DigitalOutputs.DO0Set);
-        }
+        get => DigitalOutputState.HasFlag(DigitalOutputs.DO0Set);
         set
         {
-            if (value)
-            {
-                DigitalOutputState |= DigitalOutputs.DO0Set;
-            }
-            else
-            {
-                DigitalOutputState &= ~DigitalOutputs.DO0Set;
-            }
+            var newValue = SetExclusiveFlagState(
+                DigitalOutputState,
+                DigitalOutputs.DO0Set,
+                DigitalOutputs.DO0Clear,
+                value);
 
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsDO0SetEnabled_DigitalOutputState));
-            this.RaisePropertyChanged(nameof(DigitalOutputState));
+            if (DigitalOutputState == newValue)
+                return;
+
+            DigitalOutputState = newValue;
+            this.RaisePropertyChanged(nameof(IsDO0Enabled_DigitalOutputState));
         }
     }
 
-    public bool IsDO1SetEnabled_DigitalOutputState
+    public bool IsDO1Enabled_DigitalOutputState
     {
-        get
-        {
-            return DigitalOutputState.HasFlag(DigitalOutputs.DO1Set);
-        }
+        get => DigitalOutputState.HasFlag(DigitalOutputs.DO1Set);
         set
         {
-            if (value)
-            {
-                DigitalOutputState |= DigitalOutputs.DO1Set;
-            }
-            else
-            {
-                DigitalOutputState &= ~DigitalOutputs.DO1Set;
-            }
+            var newValue = SetExclusiveFlagState(
+                DigitalOutputState,
+                DigitalOutputs.DO1Set,
+                DigitalOutputs.DO1Clear,
+                value);
 
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsDO1SetEnabled_DigitalOutputState));
-            this.RaisePropertyChanged(nameof(DigitalOutputState));
-        }
-    }
+            if (DigitalOutputState == newValue)
+                return;
 
-    public bool IsDO0ClearEnabled_DigitalOutputState
-    {
-        get
-        {
-            return DigitalOutputState.HasFlag(DigitalOutputs.DO0Clear);
-        }
-        set
-        {
-            if (value)
-            {
-                DigitalOutputState |= DigitalOutputs.DO0Clear;
-            }
-            else
-            {
-                DigitalOutputState &= ~DigitalOutputs.DO0Clear;
-            }
-
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsDO0ClearEnabled_DigitalOutputState));
-            this.RaisePropertyChanged(nameof(DigitalOutputState));
-        }
-    }
-
-    public bool IsDO1ClearEnabled_DigitalOutputState
-    {
-        get
-        {
-            return DigitalOutputState.HasFlag(DigitalOutputs.DO1Clear);
-        }
-        set
-        {
-            if (value)
-            {
-                DigitalOutputState |= DigitalOutputs.DO1Clear;
-            }
-            else
-            {
-                DigitalOutputState &= ~DigitalOutputs.DO1Clear;
-            }
-
-            // Notify the UI about the change
-            this.RaisePropertyChanged(nameof(IsDO1ClearEnabled_DigitalOutputState));
-            this.RaisePropertyChanged(nameof(DigitalOutputState));
+            DigitalOutputState = newValue;
+            this.RaisePropertyChanged(nameof(IsDO1Enabled_DigitalOutputState));
         }
     }
 
@@ -702,11 +441,15 @@ public class LedArrayViewModel : ViewModelBase
             PulseMode = new PulseModePayload(PulseMode.Led0Mode, value);
     
             this.RaisePropertyChanged(nameof(Led1SelectedPulseMode));
+            this.RaisePropertyChanged(nameof(IsLed1PwmMode));
+            this.RaisePropertyChanged(nameof(IsLed1IntervalMode));
         }
     }
     
     public bool IsLed0PwmMode => Led0SelectedPulseMode == PulseModeConfig.Pwm;
     public bool IsLed0IntervalMode => Led0SelectedPulseMode == PulseModeConfig.PulseTime;
+    public bool IsLed1PwmMode => Led1SelectedPulseMode == PulseModeConfig.Pwm;
+    public bool IsLed1IntervalMode => Led1SelectedPulseMode == PulseModeConfig.PulseTime;
     
     #endregion
 
@@ -812,28 +555,29 @@ public class LedArrayViewModel : ViewModelBase
         this.WhenAnyValue(x => x.EnablePower)
             .Subscribe(x =>
             {
-                IsLed0OnEnabled_EnablePower = x.HasFlag(LedState.Led0On);
-                IsLed1OnEnabled_EnablePower = x.HasFlag(LedState.Led1On);
-                IsLed0OffEnabled_EnablePower = x.HasFlag(LedState.Led0Off);
-                IsLed1OffEnabled_EnablePower = x.HasFlag(LedState.Led1Off);
+                this.RaisePropertyChanged(nameof(IsLed0Enabled_EnablePower));
+                this.RaisePropertyChanged(nameof(IsLed1Enabled_EnablePower));
             });
 
         this.WhenAnyValue(x => x.EnableLedMode)
             .Subscribe(x =>
             {
-                IsLed0OnEnabled_EnableLedMode = x.HasFlag(LedState.Led0On);
-                IsLed1OnEnabled_EnableLedMode = x.HasFlag(LedState.Led1On);
-                IsLed0OffEnabled_EnableLedMode = x.HasFlag(LedState.Led0Off);
-                IsLed1OffEnabled_EnableLedMode = x.HasFlag(LedState.Led1Off);
+                this.RaisePropertyChanged(nameof(IsLed0Enabled_EnableLedMode));
+                this.RaisePropertyChanged(nameof(IsLed1Enabled_EnableLedMode));
             });
 
         this.WhenAnyValue(x => x.EnableLed)
-            .Subscribe(x =>
+            .Subscribe(_ =>
             {
-                IsLed0OnEnabled_EnableLed = x.HasFlag(LedState.Led0On);
-                IsLed1OnEnabled_EnableLed = x.HasFlag(LedState.Led1On);
-                IsLed0OffEnabled_EnableLed = x.HasFlag(LedState.Led0Off);
-                IsLed1OffEnabled_EnableLed = x.HasFlag(LedState.Led1Off);
+                this.RaisePropertyChanged(nameof(IsLed0Enabled_EnableLed));
+                this.RaisePropertyChanged(nameof(IsLed1Enabled_EnableLed));
+            });
+
+        this.WhenAnyValue(x => x.EnableLedWrite)
+            .Subscribe(_ =>
+            {
+                this.RaisePropertyChanged(nameof(IsLed0Enabled_EnableLedWrite));
+                this.RaisePropertyChanged(nameof(IsLed1Enabled_EnableLedWrite));
             });
 
         this.WhenAnyValue(x => x.DigitalInputState)
@@ -846,19 +590,15 @@ public class LedArrayViewModel : ViewModelBase
         this.WhenAnyValue(x => x.AuxDigitalOutputState)
             .Subscribe(x =>
             {
-                IsAux0SetEnabled_AuxDigitalOutputState = x.HasFlag(AuxDigitalOutputs.Aux0Set);
-                IsAux1SetEnabled_AuxDigitalOutputState = x.HasFlag(AuxDigitalOutputs.Aux1Set);
-                IsAux0ClearEnabled_AuxDigitalOutputState = x.HasFlag(AuxDigitalOutputs.Aux0Clear);
-                IsAux1ClearEnabled_AuxDigitalOutputState = x.HasFlag(AuxDigitalOutputs.Aux1Clear);
+                this.RaisePropertyChanged(nameof(IsAux0Enabled_AuxDigitalOutputState));
+                this.RaisePropertyChanged(nameof(IsAux1Enabled_AuxDigitalOutputState));
             });
 
         this.WhenAnyValue(x => x.DigitalOutputState)
             .Subscribe(x =>
             {
-                IsDO0SetEnabled_DigitalOutputState = x.HasFlag(DigitalOutputs.DO0Set);
-                IsDO1SetEnabled_DigitalOutputState = x.HasFlag(DigitalOutputs.DO1Set);
-                IsDO0ClearEnabled_DigitalOutputState = x.HasFlag(DigitalOutputs.DO0Clear);
-                IsDO1ClearEnabled_DigitalOutputState = x.HasFlag(DigitalOutputs.DO1Clear);
+                this.RaisePropertyChanged(nameof(IsDO0Enabled_DigitalOutputState));
+                this.RaisePropertyChanged(nameof(IsDO1Enabled_DigitalOutputState));
             });
 
         this.WhenAnyValue(x => x.PulseMode)
@@ -867,7 +607,9 @@ public class LedArrayViewModel : ViewModelBase
                 this.RaisePropertyChanged(nameof(Led0SelectedPulseMode));
                 this.RaisePropertyChanged(nameof(Led1SelectedPulseMode));
                 this.RaisePropertyChanged(nameof(IsLed0PwmMode));
+                this.RaisePropertyChanged(nameof(IsLed1PwmMode));
                 this.RaisePropertyChanged(nameof(IsLed0IntervalMode));
+                this.RaisePropertyChanged(nameof(IsLed1IntervalMode));
             });
 
         // force initial population of currently connected ports
@@ -975,7 +717,9 @@ public class LedArrayViewModel : ViewModelBase
 
         EnablePower = await _device.ReadEnablePowerAsync();
         EnableLedMode = await _device.ReadEnableLedModeAsync();
-        EnableLed = await _device.ReadEnableLedAsync();
+        var enableLed = await _device.ReadEnableLedAsync();
+        EnableLed = enableLed;
+        EnableLedWrite = enableLed;
         DigitalInputState = await _device.ReadDigitalInputStateAsync();
         DigitalOutputSync = await _device.ReadDigitalOutputSyncAsync();
         DigitalInputTrigger = await _device.ReadDigitalInputTriggerAsync();
@@ -1037,12 +781,7 @@ public class LedArrayViewModel : ViewModelBase
                     // Check if EnableLed event is enabled
                     if (IsEnableLedEnabled)
                     {
-                        var result = await device.ReadEnableLedModeAsync(cancellationToken);
-                        // Update the corresponding property with the result
-                        EnableLedMode = result;
-                        observer.OnNext($"EnableLed: {result}");
-
-                        result = await device.ReadEnableLedAsync(cancellationToken);
+                        var result = await device.ReadEnableLedAsync(cancellationToken);
                         EnableLed = result;
                         observer.OnNext($"EnableLed: {result}");
                     }
@@ -1081,13 +820,14 @@ public class LedArrayViewModel : ViewModelBase
             if (_device == null)
                 throw new Exception("You need to connect to the device first");
 
-            /*****************************************************************
-            * TODO: Please REVIEW all these registers and update the values
-            * ****************************************************************/
             await WriteAndLogAsync(
                 value => _device.WriteEnablePowerAsync(value),
                 EnablePower,
                 "EnablePower");
+            await WriteAndLogAsync(
+                value => _device.WriteEnableLedAsync(value),
+                EnableLedWrite,
+                "EnableLed");
             await WriteAndLogAsync(
                 value => _device.WriteEnableLedModeAsync(value),
                 EnableLedMode,
@@ -1252,35 +992,37 @@ public class LedArrayViewModel : ViewModelBase
             );
     }
 
-
-    public class ArrayItemWrapper<T> : ReactiveObject
+    private static LedState SetExclusiveFlagState(
+        LedState current,
+        LedState onFlag,
+        LedState offFlag,
+        bool isEnabled)
     {
-        public int Index { get; }
-
-        [Reactive]
-        public T Value { get; set; }
-
-        public ArrayItemWrapper(int index, T value)
-        {
-            Index = index;
-            Value = value;
-        }
+        current &= ~(onFlag | offFlag);
+        current |= isEnabled ? onFlag : offFlag;
+        return current;
     }
-
-    private void UpdateArrayCollection<T>(T[] array, ObservableCollection<ArrayItemWrapper<T>> collection)
+    
+private static AuxDigitalOutputs SetExclusiveFlagState(
+        AuxDigitalOutputs current,
+        AuxDigitalOutputs setFlag,
+        AuxDigitalOutputs clearFlag,
+        bool isSet)
     {
-        if (array == null)
-            return;
-
-        RxApp.MainThreadScheduler.Schedule(() =>
-        {
-            collection.Clear();
-
-            for (int i = 0; i < array.Length; i++)
-            {
-                collection.Add(new ArrayItemWrapper<T>(i, array[i]));
-            }
-        });
+        current &= ~(setFlag | clearFlag);
+        current |= isSet ? setFlag : clearFlag;
+        return current;
     }
-
+    
+    private static DigitalOutputs SetExclusiveFlagState(
+        DigitalOutputs current,
+        DigitalOutputs setFlag,
+        DigitalOutputs clearFlag,
+        bool isSet)
+    {
+        current &= ~(setFlag | clearFlag);
+        current |= isSet ? setFlag : clearFlag;
+        return current;
+    }
+    
 }
