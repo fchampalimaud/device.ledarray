@@ -134,42 +134,148 @@
           </Grid>
         </Grid>
         <StackPanel Orientation="Horizontal">
-          <TabControl SelectedIndex="1" Margin="0,0,10,0">
+          <TabControl SelectedIndex="0" Margin="0,0,10,0">
             <!-- Control and Events Column -->
             <TabItem Header="Control and Events" FontSize="20" FontWeight="SemiBold">
               <ScrollViewer>
-                <StackPanel Spacing="20" Margin="0,10,0,0">
+                <StackPanel Spacing="10" Margin="0,10,0,0">
                   <!-- Enable Events -->
                   <controls:RegisterField Header="Enable Device Events"
                                           Description="Specifies all the active events in the device.">
                     <StackPanel Spacing="10">
                       <CheckBox IsChecked="{Binding IsEnableLedEnabled}"
                                 IsEnabled="True">
-                        EnableLed
+                        Enable Led
                       </CheckBox>
                       <CheckBox IsChecked="{Binding IsDigitalInputStateEnabled}"
                                 IsEnabled="True">
-                        DigitalInputState
+                        Digital Input State
                       </CheckBox>
                     </StackPanel>
                   </controls:RegisterField>
 
-                  <!-- Register: DigitalInputState (Read-Only, Event) -->
-                  <controls:RegisterField Header="DigitalInputState"
-                                              Description="State of the digital input pins. An event will be emitted when the value of any digital input pin changes.">
-                    <StackPanel Orientation="Vertical" Spacing="10">
-                      <StackPanel Orientation="Horizontal" Spacing="5">
-                        <controls:VisualStatus Status="{Binding IsDI0Enabled_DigitalInputState}"
-                                               Width="15" Height="15" />
-                        <TextBlock Text="DI0" VerticalAlignment="Center" />
-                      </StackPanel>
-                      <StackPanel Orientation="Horizontal" Spacing="5">
-                        <controls:VisualStatus Status="{Binding IsDI1Enabled_DigitalInputState}"
-                                               Width="15" Height="15" />
-                        <TextBlock Text="DI1" VerticalAlignment="Center" />
-                      </StackPanel>
+                  <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                        ColumnDefinitions="250,50,50,*">
+                    <!-- Header Row -->
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="0" HorizontalAlignment="Center"
+                               FontWeight="SemiBold" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="1" HorizontalAlignment="Center"
+                               FontWeight="SemiBold" />
+                    <TextBlock Grid.Row="0" Grid.Column="3" Text="Action" HorizontalAlignment="Left"
+                               FontWeight="SemiBold" Margin="25,0,0,10" />
+                    <!-- EnablePower configuration row -->
+                    <controls:RegisterField Grid.Row="1" Grid.Column="0"
+                                            Margin="0,10,0,0"
+                                            Header="Enable Power to LEDs"
+                                            Description="Control the enable of both LEDs' power supply." />
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding IsLed0Enabled_EnablePower}"
+                              HorizontalAlignment="Center" Margin="5,0,0,0" />
+                    <CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding IsLed1Enabled_EnablePower}"
+                              HorizontalAlignment="Center" Margin="5,0,0,0" />
+                    <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Left"
+                                Margin="20,0,0,0">
+                      <Button Content="Apply" Command="{Binding WriteRegisterCommand}" CommandParameter="EnablePower" />
                     </StackPanel>
-                    </controls:RegisterField>
+                    <!-- EnableLedMode configuration row -->
+                    <controls:RegisterField Grid.Row="2" Grid.Column="0"
+                                            Margin="0,10,0,0"
+                                            Header="Start and Stop Behavior of LEDs"
+                                            Description="Start/stop the LEDs according to the pulse configuration." />
+                    <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding IsLed0Enabled_EnableLedMode}"
+                              HorizontalAlignment="Center" Margin="5,0,0,0" />
+                    <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding IsLed1Enabled_EnableLedMode}"
+                              HorizontalAlignment="Center" Margin="5,0,0,0" />
+                    <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Left"
+                                Margin="20,0,0,0">
+                      <Button Content="Apply" Command="{Binding WriteRegisterCommand}"
+                              CommandParameter="EnableLedMode" />
+                    </StackPanel>
+                    <!-- EnableLed configuration row -->
+                    <controls:RegisterField Grid.Row="3" Grid.Column="0"
+                                            Margin="0,10,0,0"
+                                            Header="Enable LEDs"
+                                            Description="Enables/disables the LEDs." />
+                    <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsLed0Enabled_EnableLedWrite}"
+                              HorizontalAlignment="Center" Margin="5,0,0,0" />
+                    <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding IsLed1Enabled_EnableLedWrite}"
+                              HorizontalAlignment="Center" Margin="5,0,0,0" />
+                    <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Left"
+                                Margin="20,0,0,0">
+                      <Button Content="Apply" Command="{Binding WriteRegisterCommand}" CommandParameter="EnableLedWrite" />
+                    </StackPanel>
+                    <!-- DigitalOutputState configuration row -->
+                    <controls:RegisterField Grid.Row="4" Grid.Column="0"
+                                            Margin="0,10,0,0"
+                                            Header="Digital Outputs"
+                                            Description="Write the state of digital output lines." />
+                    <CheckBox Grid.Row="4" Grid.Column="1"
+                              IsChecked="{Binding IsDO0Enabled_DigitalOutputState}"
+                              HorizontalAlignment="Center"
+                              Margin="5,0,0,0"
+                              ToolTip.Tip="Checked = Set, Unchecked = Clear" />
+                    <CheckBox Grid.Row="4" Grid.Column="2"
+                              IsChecked="{Binding IsDO1Enabled_DigitalOutputState}"
+                              HorizontalAlignment="Center"
+                              Margin="5,0,0,0"
+                              ToolTip.Tip="Checked = Set, Unchecked = Clear" />
+                    <StackPanel Grid.Row="4" Grid.Column="3"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                Margin="20,0,0,0">
+                      <Button Content="Apply"
+                              Command="{Binding WriteRegisterCommand}"
+                              CommandParameter="DigitalOutputState" />
+                    </StackPanel>
+                    <!-- AuxDigitalOutputState configuration row -->
+                    <controls:RegisterField Grid.Row="5" Grid.Column="0"
+                                            Margin="0,10,0,0"
+                                            Header="Auxiliary Digital Outputs"
+                                            Description="Write the state of the auxiliary digital output bits." />
+                    <CheckBox Grid.Row="5" Grid.Column="1"
+                              IsChecked="{Binding IsAux0Enabled_AuxDigitalOutputState}"
+                              HorizontalAlignment="Center"
+                              Margin="5,0,0,0"
+                              ToolTip.Tip="Checked = Set, Unchecked = Clear" />
+                    <CheckBox Grid.Row="5" Grid.Column="2"
+                              IsChecked="{Binding IsAux1Enabled_AuxDigitalOutputState}"
+                              HorizontalAlignment="Center"
+                              Margin="5,0,0,0"
+                              ToolTip.Tip="Checked = Set, Unchecked = Clear" />
+                    <StackPanel Grid.Row="5" Grid.Column="3"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                Margin="20,0,0,0">
+                      <Button Content="Apply"
+                              Command="{Binding WriteRegisterCommand}"
+                              CommandParameter="AuxDigitalOutputState" />
+                    </StackPanel>
+                    <!-- EnableLed Event status configuration row -->
+                    <controls:RegisterField Grid.Row="6" Grid.Column="0"
+                                            Margin="0,10,0,0"
+                                            Header="Enable LEDs Status"
+                                            Description="Enables/disables the LEDs." />
+                    <controls:VisualStatus Grid.Row="6" Grid.Column="1"
+                                           Status="{Binding IsLed0Enabled_EnableLed}"
+                                           Margin="-1,0,0,0"
+                                           Width="15" Height="15" />
+                    <controls:VisualStatus Grid.Row="6" Grid.Column="2"
+                                           Status="{Binding IsLed1Enabled_EnableLed}"
+                                           Margin="-1,0,0,0"
+                                           Width="14" Height="14" />
+                    <!-- DigitalInputState event row -->
+                    <controls:RegisterField Grid.Row="7" Grid.Column="0"
+                                            Margin="0,10,0,0"
+                                            Header="Digital Inputs Status"
+                                            Description="State of the digital input pins. An event will be emitted when the value of any digital input pin changes." />
+                    <controls:VisualStatus Grid.Row="7" Grid.Column="1"
+                                           Status="{Binding IsDI0Enabled_DigitalInputState}"
+                                           Margin="-1,0,0,0"
+                                           Width="15" Height="15" />
+                    <controls:VisualStatus Grid.Row="7" Grid.Column="2"
+                                           Status="{Binding IsDI1Enabled_DigitalInputState}"
+                                           Margin="-1,0,0,0"
+                                           Width="14" Height="14" />
+                  </Grid>
                 </StackPanel>
               </ScrollViewer>
             </TabItem>
@@ -178,6 +284,7 @@
             <TabItem Header="LED Array 0" FontSize="20" FontWeight="SemiBold">
               <ScrollViewer>
                 <StackPanel Spacing="10"
+                            Margin="0, 10, 0, 0"
                             Background="{Binding SurfaceBackground}"
                             controls:GroupBox.SurfaceBackground="{Binding SurfaceBackground}">
                   <!-- Register: PulseMode (Write) -->
@@ -328,165 +435,6 @@
                                      FormatString="F0"/>
                     </controls:RegisterField>
                   </Grid>
-
-                  <!-- Register: AuxDigitalOutputState (Write) -->
-                  <controls:RegisterField Header="AuxDigitalOutputState"
-                                              Description="Write the state of the auxiliary digital output bits.">
-                    <StackPanel Orientation="Vertical" Spacing="10">
-                      <CheckBox IsChecked="{Binding IsAux0SetEnabled_AuxDigitalOutputState}"
-                                IsEnabled="True">
-                        Aux0Set
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsAux1SetEnabled_AuxDigitalOutputState}"
-                                IsEnabled="True">
-                        Aux1Set
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsAux0ClearEnabled_AuxDigitalOutputState}"
-                                IsEnabled="True">
-                        Aux0Clear
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsAux1ClearEnabled_AuxDigitalOutputState}"
-                                IsEnabled="True">
-                        Aux1Clear
-                      </CheckBox>
-                    </StackPanel>
-                  </controls:RegisterField>
-              
-                  <!-- Register: DigitalInputTrigger (Write) -->
-                  <controls:RegisterField Header="DigitalInputTrigger"
-                                              Description="Configuration of the digital inputs pins behavior.">
-                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
-                      <TextBlock Grid.Row="0" Grid.Column="0"
-                                 Text="DI0Trigger:"
-                                 VerticalAlignment="Center"
-                                 Margin="0,5,10,5" />
-                      <ComboBox Grid.Row="0" Grid.Column="1"
-                                SelectedItem="{Binding DigitalInputTrigger,
-                                         Converter={StaticResource PayloadFieldConverter},
-                                         ConverterParameter='DI0Trigger'}"
-                                Width="200"
-                                HorizontalAlignment="Left">
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnablePower" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableBehavior" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableLed" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnablePower" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableBehavior" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableLed" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.None" />
-                      </ComboBox>
-                      <TextBlock Grid.Row="1" Grid.Column="0"
-                                 Text="DI1Trigger:"
-                                 VerticalAlignment="Center"
-                                 Margin="0,5,10,5" />
-                      <ComboBox Grid.Row="1" Grid.Column="1"
-                                SelectedItem="{Binding DigitalInputTrigger,
-                                         Converter={StaticResource PayloadFieldConverter},
-                                         ConverterParameter='DI1Trigger'}"
-                                Width="200"
-                                HorizontalAlignment="Left">
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnablePower" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableBehavior" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableLed" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnablePower" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableBehavior" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableLed" />
-                        <x:Static Member="local:DigitalInputTriggerConfig.None" />
-                      </ComboBox>
-                    </Grid>
-                  </controls:RegisterField>
-
-                  <!-- Register: DigitalOutputState (Write) -->
-                  <controls:RegisterField Header="DigitalOutputState"
-                                              Description="Write the state of digital output lines.">
-                    <StackPanel Orientation="Vertical" Spacing="10">
-                      <CheckBox IsChecked="{Binding IsDO0SetEnabled_DigitalOutputState}"
-                                IsEnabled="True">
-                        DO0Set
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsDO1SetEnabled_DigitalOutputState}"
-                                IsEnabled="True">
-                        DO1Set
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsDO0ClearEnabled_DigitalOutputState}"
-                                IsEnabled="True">
-                        DO0Clear
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsDO1ClearEnabled_DigitalOutputState}"
-                                IsEnabled="True">
-                        DO1Clear
-                      </CheckBox>
-                    </StackPanel>
-                  </controls:RegisterField>
-              
-                  <!-- Register: EnableLed (Write, Event) -->
-                  <controls:RegisterField Header="EnableLed"
-                                              Description="Enables/disables the LEDs.">
-                    <StackPanel Orientation="Vertical" Spacing="10">
-                      <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnableLed}"
-                                IsEnabled="True">
-                        Led0On
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsLed1OnEnabled_EnableLed}"
-                                IsEnabled="True">
-                        Led1On
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsLed0OffEnabled_EnableLed}"
-                                IsEnabled="True">
-                        Led0Off
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsLed1OffEnabled_EnableLed}"
-                                IsEnabled="True">
-                        Led1Off
-                      </CheckBox>
-                    </StackPanel>
-                  </controls:RegisterField>
-
-              <!-- Register: EnableLedMode (Write) -->
-                  <controls:RegisterField Header="EnableLedMode"
-                                              Description="Start/stop the LEDs according to the pulse configuration.">
-                    <StackPanel Orientation="Vertical" Spacing="10">
-                      <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnableLedMode}"
-                                IsEnabled="True">
-                        Led0On
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsLed1OnEnabled_EnableLedMode}"
-                                IsEnabled="True">
-                        Led1On
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsLed0OffEnabled_EnableLedMode}"
-                                IsEnabled="True">
-                        Led0Off
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsLed1OffEnabled_EnableLedMode}"
-                                IsEnabled="True">
-                        Led1Off
-                      </CheckBox>
-                    </StackPanel>
-                  </controls:RegisterField>
-
-                  <!-- Register: EnablePower (Write) -->
-                  <controls:RegisterField Header="EnablePower"
-                                              Description="Control the enable of both LEDs' power supply.">
-                    <StackPanel Orientation="Vertical" Spacing="10">
-                      <CheckBox IsChecked="{Binding IsLed0OnEnabled_EnablePower}"
-                                IsEnabled="True">
-                        Led0On
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsLed1OnEnabled_EnablePower}"
-                                IsEnabled="True">
-                        Led1On
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsLed0OffEnabled_EnablePower}"
-                                IsEnabled="True">
-                        Led0Off
-                      </CheckBox>
-                      <CheckBox IsChecked="{Binding IsLed1OffEnabled_EnablePower}"
-                                IsEnabled="True">
-                        Led1Off
-                      </CheckBox>
-                    </StackPanel>
-                  </controls:RegisterField>
-
                 </StackPanel>
               </ScrollViewer>
             </TabItem>
@@ -495,6 +443,7 @@
             <TabItem Header="LED Array 1" FontSize="20" FontWeight="SemiBold">
               <ScrollViewer>
                 <StackPanel Spacing="10"
+                            Margin="0, 10, 0, 0"
                             Background="{Binding SurfaceBackground}"
                             controls:GroupBox.SurfaceBackground="{Binding SurfaceBackground}">
                   <!-- Register: PulseMode (Write) -->
