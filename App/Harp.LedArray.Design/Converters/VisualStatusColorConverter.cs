@@ -13,8 +13,8 @@ public class VisualStatusColorConverter : IValueConverter
         return status switch
         {
             true => new SolidColorBrush(Colors.Green),
-            false => new SolidColorBrush(Colors.Red),
-            _ => new SolidColorBrush(Colors.Gray)
+            false => new SolidColorBrush(Colors.LightGray),
+            _ => new SolidColorBrush(Colors.LightGray)
         };
     }
 
