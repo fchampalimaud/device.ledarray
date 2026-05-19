@@ -467,7 +467,7 @@ public class LedArrayViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> ShowAboutCommand { get; private set; }
     public ReactiveCommand<Unit, Unit> ClearMessagesCommand { get; private set; }
     public ReactiveCommand<Unit, Unit> ShowMessagesCommand { get; private set; }
-
+    public ReactiveCommand<string, Unit> WriteRegisterCommand { get; private set; }
 
     #endregion
 
@@ -486,7 +486,6 @@ public class LedArrayViewModel : ViewModelBase
 
         ClearMessagesCommand = ReactiveCommand.Create(() => { SentMessages.Clear(); });
         ShowMessagesCommand = ReactiveCommand.Create(() => { ShowWriteMessages = !ShowWriteMessages; });
-
 
         LoadDeviceInformation = ReactiveCommand.CreateFromObservable(LoadUsbInformation);
         LoadDeviceInformation.IsExecuting.ToPropertyEx(this, x => x.IsLoadingPorts);
@@ -522,6 +521,46 @@ public class LedArrayViewModel : ViewModelBase
         ResetConfigurationCommand.ThrownExceptions.Subscribe(ex =>
             //Log.Error(ex, "Error resetting device configuration with error: {Exception}", ex));
             Console.WriteLine($"Error resetting device configuration with error: {ex}"));
+
+        WriteRegisterCommand = ReactiveCommand.CreateFromTask<string>(async registerName =>
+        {
+            if (_device == null) return;
+
+            var propertyName = registerName;
+            var writeMethodName = $"Write{registerName}Async";
+            var logRegisterName = registerName;
+
+            if (registerName == nameof(EnableLedWrite))
+            {
+                propertyName = nameof(EnableLedWrite);
+                writeMethodName = "WriteEnableLedAsync";
+                logRegisterName = nameof(EnableLed);
+            }
+
+            var property = GetType().GetProperty(propertyName);
+            if (property == null) return;
+
+            var value = property.GetValue(this);
+
+            // Find the write method for this register
+            var writeMethod = _device.GetType().GetMethod(writeMethodName);
+            if (writeMethod != null)
+            {
+                if (writeMethod.Invoke(_device, new[] { value, CancellationToken.None }) is Task task)
+                    await task;
+                else
+                    return;
+
+                RxApp.MainThreadScheduler.Schedule(() =>
+                {
+                    SentMessages.Add($"{DateTime.Now:HH:mm:ss.fff} - Write {logRegisterName}: {value}");
+                });
+            }
+        });
+        WriteRegisterCommand.IsExecuting.ToPropertyEx(this, x => x.IsSaving);
+        WriteRegisterCommand.ThrownExceptions.Subscribe(ex =>
+            //Log.Error(ex, "Error writing register with error: {Exception}", ex));
+            Console.WriteLine($"Error writing register with error: {ex}"));
 
         this.WhenAnyValue(x => x.Connected)
             .Subscribe(x => { ConnectButtonText = x ? "Disconnect" : "Connect"; });
