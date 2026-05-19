@@ -990,6 +990,9 @@ public class LedArrayViewModel : ViewModelBase
                 // Re-subscribe to the device events observable
                 SubscribeToEvents();
             }
+
+            // read the read-only values from the device again 
+            await ReadRuntimeStatusRegistersAsync();
         });
     }
 
@@ -1005,6 +1008,25 @@ public class LedArrayViewModel : ViewModelBase
                     "ResetDevice");
             }
         });
+    }
+
+    private async Task ReadRuntimeStatusRegistersAsync(CancellationToken ct = default)
+    {
+        if (_device == null)
+            throw new Exception("Device is not connected");
+
+        // On get read-only registers
+        Led0PwmReal = await _device.ReadLed0PwmRealAsync(ct);
+        Led0PwmDutyCycleReal = await _device.ReadLed0PwmDutyCycleRealAsync(ct);
+        Led1PwmReal = await _device.ReadLed1PwmRealAsync(ct);
+        Led1PwmDutyCycleReal = await _device.ReadLed1PwmDutyCycleRealAsync(ct);
+
+        // Runtime output states
+        AuxDigitalOutputState = await _device.ReadAuxDigitalOutputStateAsync(ct);
+        DigitalOutputState = await _device.ReadDigitalOutputStateAsync(ct);
+
+        // Other runtime-visible state you may want refreshed post-save
+        EnableEvents = await _device.ReadEnableEventsAsync(ct);
     }
 
     private async Task WriteAndLogAsync<T>(Func<T, Task> writeFunc, T value, string registerName)
