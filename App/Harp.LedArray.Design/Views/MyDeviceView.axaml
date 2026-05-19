@@ -596,8 +596,89 @@
             <TabItem Header="Digital &amp; Power" FontSize="20" FontWeight="SemiBold">
               <ScrollViewer>
                 <StackPanel Spacing="10"
+                            Margin="0, 10, 0, 0"
                             Background="{Binding SurfaceBackground}"
                             controls:GroupBox.SurfaceBackground="{Binding SurfaceBackground}">
+                  <!-- Register: DigitalInputTrigger (Write) -->
+                  <controls:RegisterField Header="Digital Inputs Trigger Configuration"
+                                              Description="Configuration of the digital inputs pins behavior.">
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                      <TextBlock Grid.Row="0" Grid.Column="0"
+                                 Text="DI0 Trigger"
+                                 VerticalAlignment="Center"
+                                 Margin="0,5,10,5" />
+                      <ComboBox Grid.Row="0" Grid.Column="1"
+                                SelectedItem="{Binding DigitalInputTrigger,
+                                         Converter={StaticResource PayloadFieldConverter},
+                                         ConverterParameter='DI0Trigger'}"
+                                Width="220"
+                                HorizontalAlignment="Left"
+                                Margin="0,5,0,5">
+                        <ComboBox.Resources>
+                          <conv:EnumDisplayConverter x:Key="EnumDisplayConverter">
+                            <conv:EnumDisplayConverter.Mappings>
+                              <system:String x:Key="Led0EnablePower">Enable power to LED0</system:String>
+                              <system:String x:Key="Led0EnableBehavior">Start and stop LED0 behavior</system:String>
+                              <system:String x:Key="Led0EnableLed">Turn LED0 on and off</system:String>
+                              <system:String x:Key="Led1EnablePower">Enable power to LED1</system:String>
+                              <system:String x:Key="Led1EnableBehavior">Start and stop LED1 behavior</system:String>
+                              <system:String x:Key="Led1EnableLed">Turn LED1 on and off</system:String>
+                              <system:String x:Key="None">No trigger</system:String>
+                            </conv:EnumDisplayConverter.Mappings>
+                          </conv:EnumDisplayConverter>
+                        </ComboBox.Resources>
+                        <ComboBox.ItemTemplate>
+                          <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                          </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnablePower" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableBehavior" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableLed" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnablePower" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableBehavior" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableLed" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.None" />
+                      </ComboBox>
+                      <TextBlock Grid.Row="1" Grid.Column="0"
+                                 Text="DI1 Trigger"
+                                 VerticalAlignment="Center"
+                                 Margin="0,5,10,5" />
+                      <ComboBox Grid.Row="1" Grid.Column="1"
+                                SelectedItem="{Binding DigitalInputTrigger,
+                                         Converter={StaticResource PayloadFieldConverter},
+                                         ConverterParameter='DI1Trigger'}"
+                                Width="220"
+                                HorizontalAlignment="Left"
+                                Margin="0,5,0,5">
+                        <ComboBox.Resources>
+                          <conv:EnumDisplayConverter x:Key="EnumDisplayConverter">
+                            <conv:EnumDisplayConverter.Mappings>
+                              <system:String x:Key="Led0EnablePower">Enable power to LED0</system:String>
+                              <system:String x:Key="Led0EnableBehavior">Start and stop LED0 behavior</system:String>
+                              <system:String x:Key="Led0EnableLed">Turn LED0 on and off</system:String>
+                              <system:String x:Key="Led1EnablePower">Enable power to LED1</system:String>
+                              <system:String x:Key="Led1EnableBehavior">Start and stop LED1 behavior</system:String>
+                              <system:String x:Key="Led1EnableLed">Turn LED1 on and off</system:String>
+                              <system:String x:Key="None">No trigger</system:String>
+                            </conv:EnumDisplayConverter.Mappings>
+                          </conv:EnumDisplayConverter>
+                        </ComboBox.Resources>
+                        <ComboBox.ItemTemplate>
+                          <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                          </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnablePower" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableBehavior" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led0EnableLed" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnablePower" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableBehavior" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.Led1EnableLed" />
+                        <x:Static Member="local:DigitalInputTriggerConfig.None" />
+                      </ComboBox>
+                    </Grid>
+                  </controls:RegisterField>
                   <!-- Register: DigitalOutputSync (Write) -->
                   <controls:RegisterField Header="Digital Outputs Configuration"
                                               Description="Configuration of the synchronization of the digital outputs with the LEDs state.">
@@ -666,45 +747,47 @@
                       </ComboBox>
                     </Grid>
                   </controls:RegisterField>
-
-                  <!-- Register: Led0Power (Write) -->
-                  <controls:RegisterField Header="LED Power Configuration"
-                                              Description="Configuration of the power applied to the LEDs.">
-                    <NumericUpDown Classes="register-input"
-                                   Value="{Binding Led0Power}"
-                                   Minimum="1"
-                                   Maximum="120"
-                                   Increment="1"
-                                   FormatString="F0"
-                                   Width="200"
-                                   HorizontalAlignment="Left" />
+                  
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <!-- Register: Led0Power (Write) -->
+                    <controls:RegisterField Header="LED Power Configuration"
+                                            Description="Configuration of the power applied to the LEDs.">
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led0Power}"
+                                     Minimum="1"
+                                     Maximum="120"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="200"
+                                     HorizontalAlignment="Left" />
                     </controls:RegisterField>
 
-                  <!-- Register: Led1Power (Write) -->
-                  <controls:RegisterField Header="LED1 Power"
-                                              Description="Sets the power to LED1, between 1 and 120 (arbitrary units).">
-                    <NumericUpDown Classes="register-input"
-                                   Value="{Binding Led1Power}"
-                                   Minimum="1"
-                                   Maximum="120"
-                                   Increment="1"
-                                   FormatString="F0"
-                                   Width="200"
-                                   HorizontalAlignment="Left" />
-                  </controls:RegisterField>
-
-                  <!-- Register: AuxLedPower (Write) -->
-                  <controls:RegisterField Header="Auxiliary LED Power"
-                                              Description="Configuration of the power applied to the auxiliary LED.">
-                    <NumericUpDown Classes="register-input"
-                                   Value="{Binding AuxLedPower}"
-                                   Minimum="1"
-                                   Maximum="120"
-                                   Increment="1"
-                                   FormatString="F0"
-                                   Width="200"
-                                   HorizontalAlignment="Left" />
+                    <!-- Register: Led1Power (Write) -->
+                    <controls:RegisterField Header="LED1 Power"
+                                            Description="Sets the power to LED1, between 1 and 120 (arbitrary units).">
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding Led1Power}"
+                                     Minimum="1"
+                                     Maximum="120"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="200"
+                                     HorizontalAlignment="Left" />
                     </controls:RegisterField>
+
+                    <!-- Register: AuxLedPower (Write) -->
+                    <controls:RegisterField Header="Auxiliary LED Power"
+                                            Description="Configuration of the power applied to the auxiliary LED.">
+                      <NumericUpDown Classes="register-input"
+                                     Value="{Binding AuxLedPower}"
+                                     Minimum="1"
+                                     Maximum="120"
+                                     Increment="1"
+                                     FormatString="F0"
+                                     Width="200"
+                                     HorizontalAlignment="Left" />
+                    </controls:RegisterField>
+                  </StackPanel>
                 </StackPanel>
               </ScrollViewer>
             </TabItem>
